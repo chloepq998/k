@@ -284,61 +284,56 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
   <!-- 광주 지도 -->
   <div class="map-card">
     <!--
-      광주광역시 행정구역 경계 좌표 기반 도식화 (WGS84 근사값 → SVG 변환)
-      경도 126.70–127.02, 위도 35.00–35.28 → viewBox 0 0 400 395
-      광산구(서쪽 대형) · 북구(북쪽 대형) · 서구(중앙 소형) · 동구(중앙동부 소형) · 남구(남쪽)
+      실제 행정구역 경계 데이터 기반 (KOSTAT 2012 TopoJSON → WGS84 → SVG 변환)
+      LON 126.650–127.025, LAT 35.046–35.260 → viewBox 0 0 400 385
     -->
-    <svg viewBox="0 0 400 395" width="100%" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 400 385" width="100%" xmlns="http://www.w3.org/2000/svg">
 
-      <!-- 광산구 — 서쪽 대형 (실제 면적 약 42%) -->
+      <!-- 광산구 -->
       <g class="district" tabindex="0" role="button" aria-label="광산구"
          onclick="clickDistrict('gwangsan')"
          onkeydown="handleKey(event,'gwangsan')">
-        <polygon points="18,92 35,38 130,22 145,22 220,72 220,272 145,352 60,345 18,295 18,92"
-                 fill="var(--c-gwangsan)" stroke="white" stroke-width="2.5" stroke-linejoin="round"/>
-        <text x="108" y="186" text-anchor="middle" fill="white" font-size="15" font-weight="700">광산구</text>
-        <text x="108" y="204" text-anchor="middle" fill="white" font-size="10" opacity=".75">Gwangsan-gu</text>
+        <path d="M201.0,67.9 L217.8,80.2 L223.0,147.4 L203.4,154.4 L188.1,180.1 L193.4,215.9 L183.1,233.1 L180.2,259.6 L167.3,269.8 L167.1,300.9 L146.6,335.0 L134.6,339.4 L125.6,303.5 L117.9,302.4 L103.6,276.5 L49.5,268.0 L40.6,278.2 L17.4,262.5 L13.6,253.2 L17.0,225.5 L13.6,209.8 L16.0,178.0 L33.4,169.6 L15.2,130.6 L40.2,128.5 L39.8,114.2 L49.5,91.5 L65.5,104.3 L80.8,97.1 L82.8,71.7 L99.8,29.2 L127.4,24.8 L118.9,43.2 L119.1,58.9 L131.0,63.3 L150.2,79.6 L170.0,85.4 L201.0,67.9Z"
+              fill="var(--c-gwangsan)" stroke="white" stroke-width="1.5" stroke-linejoin="round"/>
+        <text x="111.7" y="178" text-anchor="middle" fill="white" font-size="14" font-weight="700" pointer-events="none">광산구</text>
       </g>
 
-      <!-- 북구 — 북쪽 대형 (실제 면적 약 29%) -->
+      <!-- 북구 -->
       <g class="district" tabindex="0" role="button" aria-label="북구"
          onclick="clickDistrict('buk')"
          onkeydown="handleKey(event,'buk')">
-        <polygon points="145,22 282,10 360,48 382,128 374,198 298,212 260,206 220,72 145,22"
-                 fill="var(--c-buk)" stroke="white" stroke-width="2.5" stroke-linejoin="round"/>
-        <text x="288" y="116" text-anchor="middle" fill="white" font-size="15" font-weight="700">북구</text>
-        <text x="288" y="134" text-anchor="middle" fill="white" font-size="10" opacity=".75">Buk-gu</text>
+        <path d="M377.3,230.4 L375.9,246.5 L364.2,263.3 L349.9,225.5 L334.2,225.5 L323.1,213.0 L321.4,199.6 L281.9,176.3 L272.8,200.4 L252.7,183.8 L249.4,171.0 L224.8,164.9 L203.4,154.4 L223.0,147.4 L217.8,80.2 L201.0,67.9 L209.1,54.8 L224.8,48.7 L244.8,29.8 L254.9,37.4 L271.2,17.3 L296.6,29.8 L298.2,48.4 L308.3,56.0 L318.2,75.8 L315.0,85.7 L331.5,116.9 L324.9,129.1 L335.0,150.1 L341.8,140.5 L368.7,138.4 L383.6,152.7 L387.8,173.4 L374.9,194.6 L377.3,230.4Z"
+              fill="var(--c-buk)" stroke="white" stroke-width="1.5" stroke-linejoin="round"/>
+        <text x="301.1" y="138" text-anchor="middle" fill="white" font-size="14" font-weight="700" pointer-events="none">북구</text>
       </g>
 
-      <!-- 서구 — 중앙 소형 (실제 면적 약 9%) ★ 클릭 가능 -->
+      <!-- 서구 ★ 클릭하면 상세 지도 -->
       <g class="district" id="seo-district" tabindex="0" role="button"
          aria-label="서구 — 클릭하면 상세 지도로 이동합니다"
          onclick="clickDistrict('seo')"
          onkeydown="handleKey(event,'seo')">
-        <polygon points="220,72 260,206 270,268 220,272 220,72"
-                 fill="var(--c-seo)" stroke="rgba(255,255,255,0.9)" stroke-width="3" stroke-linejoin="round"/>
-        <text x="244" y="200" text-anchor="middle" fill="white" font-size="12" font-weight="700">서구</text>
-        <text x="244" y="216" text-anchor="middle" fill="white" font-size="10" font-weight="600" opacity=".92">클릭▶</text>
+        <path d="M272.8,200.4 L275.5,204.5 L266.4,198.7 L250.6,208.6 L253.1,259.3 L240.2,255.2 L234.7,270.6 L205.1,280.5 L190.3,298.9 L186.7,301.5 L167.1,300.9 L167.3,269.8 L180.2,259.6 L183.1,233.1 L193.4,215.9 L188.1,180.1 L203.4,154.4 L224.8,164.9 L249.4,171.0 L252.7,183.8 L272.8,200.4Z"
+              fill="var(--c-seo)" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+        <text x="221.8" y="225" text-anchor="middle" fill="white" font-size="12" font-weight="700" pointer-events="none">서구</text>
+        <text x="221.8" y="240" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="9" font-weight="600" pointer-events="none">클릭▶</text>
       </g>
 
-      <!-- 동구 — 중앙동부 소형 (실제 면적 약 6%) -->
+      <!-- 동구 -->
       <g class="district" tabindex="0" role="button" aria-label="동구"
          onclick="clickDistrict('dong')"
          onkeydown="handleKey(event,'dong')">
-        <polygon points="260,206 298,212 374,198 362,268 270,268 260,206"
-                 fill="var(--c-dong)" stroke="white" stroke-width="2.5" stroke-linejoin="round"/>
-        <text x="316" y="236" text-anchor="middle" fill="white" font-size="13" font-weight="700">동구</text>
-        <text x="316" y="252" text-anchor="middle" fill="white" font-size="10" opacity=".75">Dong-gu</text>
+        <path d="M364.2,263.3 L353.9,298.0 L332.9,305.9 L318.0,334.1 L298.2,331.8 L284.9,302.7 L286.8,293.1 L278.7,263.1 L293.2,240.6 L275.5,204.5 L272.8,200.4 L281.9,176.3 L321.4,199.6 L323.1,213.0 L334.2,225.5 L349.9,225.5 L364.2,263.3Z"
+              fill="var(--c-dong)" stroke="white" stroke-width="1.5" stroke-linejoin="round"/>
+        <text x="313.8" y="258" text-anchor="middle" fill="white" font-size="13" font-weight="700" pointer-events="none">동구</text>
       </g>
 
-      <!-- 남구 — 남쪽 (실제 면적 약 14%) -->
+      <!-- 남구 -->
       <g class="district" tabindex="0" role="button" aria-label="남구"
          onclick="clickDistrict('nam')"
          onkeydown="handleKey(event,'nam')">
-        <polygon points="220,272 270,268 362,268 340,352 235,382 145,352 220,272"
-                 fill="var(--c-nam)" stroke="white" stroke-width="2.5" stroke-linejoin="round"/>
-        <text x="264" y="324" text-anchor="middle" fill="white" font-size="15" font-weight="700">남구</text>
-        <text x="264" y="342" text-anchor="middle" fill="white" font-size="10" opacity=".75">Nam-gu</text>
+        <path d="M275.5,204.5 L293.2,240.6 L278.7,263.1 L286.8,293.1 L284.9,302.7 L271.6,318.1 L257.3,325.4 L250.2,319.6 L236.9,332.1 L220.6,325.4 L207.5,347.2 L191.3,352.2 L183.3,369.1 L167.9,369.4 L159.3,354.5 L142.1,367.9 L132.6,364.7 L134.6,339.4 L146.6,335.0 L167.1,300.9 L186.7,301.5 L190.3,298.9 L205.1,280.5 L234.7,270.6 L240.2,255.2 L253.1,259.3 L250.6,208.6 L266.4,198.7 L275.5,204.5Z"
+              fill="var(--c-nam)" stroke="white" stroke-width="1.5" stroke-linejoin="round"/>
+        <text x="220.4" y="305" text-anchor="middle" fill="white" font-size="14" font-weight="700" pointer-events="none">남구</text>
       </g>
 
     </svg>
@@ -362,7 +357,7 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
   </div>
 
   <p class="disclaimer">
-    이 지도는 정확한 행정구역 경계보다 지역문제를 이해하기 위한 시각화에 초점을 둔 프로토타입입니다.
+    광주광역시 행정구역 경계는 KOSTAT(통계청) 2012 공개 데이터를 기반으로 합니다. 서구 상세 지도는 면적 비율 기준 도식화입니다.
   </p>
 
 </div><!-- /screen-gwangju -->
