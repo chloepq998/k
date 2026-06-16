@@ -316,6 +316,80 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
   font-size: 12px; color: var(--text-mid); line-height: 1.65;
 }
 
+/* ── 키오스크(전체화면) 버튼 ── */
+.kiosk-btn {
+  position: fixed; top: 12px; right: 12px; z-index: 400;
+  background: rgba(15,23,42,.72); color: white; border: none;
+  border-radius: 10px; padding: 8px 13px; font-size: 16px;
+  cursor: pointer; backdrop-filter: blur(6px);
+  transition: background .15s; line-height: 1;
+}
+.kiosk-btn:hover { background: rgba(15,23,42,.95); }
+
+/* ── 카드 사진 슬롯 ── */
+.card-photo { width:100%; height:190px; object-fit:cover; border-radius:12px; margin-bottom:14px; display:block; }
+.card-photo-ph {
+  width:100%; height:120px; border-radius:12px; margin-bottom:14px;
+  background:var(--bg); border:2px dashed var(--border);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:6px; color:var(--text-light); font-size:12px; text-align:center;
+}
+.ph-icon { font-size:26px; }
+
+/* ── 활동 체크리스트 ── */
+.checklist { display:flex; flex-direction:column; gap:10px; margin-top:4px; }
+.check-item {
+  display:flex; align-items:flex-start; gap:10px;
+  cursor:pointer; padding:2px 0; user-select:none;
+}
+.check-box {
+  width:22px; height:22px; border-radius:6px; flex-shrink:0; margin-top:1px;
+  border:2px solid var(--border); background:white;
+  display:flex; align-items:center; justify-content:center;
+  font-size:13px; font-weight:700; transition:background .15s, border-color .15s;
+}
+.check-item.done .check-box { color:white; }
+.check-label { font-size:13px; color:var(--text-mid); line-height:1.5; flex:1; transition:color .15s; }
+.check-item.done .check-label { text-decoration:line-through; color:var(--text-light); }
+.check-progress {
+  font-size:11px; font-weight:700; color:var(--text-light);
+  margin-top:8px; text-align:right;
+}
+.prog-done { color:var(--clr-4); font-size:13px; }
+
+/* 체크박스 색상: 문제 유형별 */
+#card[data-key="usquare"]  .check-item.done .check-box { background:var(--clr-1); border-color:var(--clr-1); }
+#card[data-key="yangdong"] .check-item.done .check-box { background:var(--clr-2); border-color:var(--clr-2); }
+#card[data-key="sangmu"]   .check-item.done .check-box { background:var(--clr-3); border-color:var(--clr-3); }
+#card[data-key="pungam"]   .check-item.done .check-box { background:var(--clr-4); border-color:var(--clr-4); }
+#card[data-key="seochang"] .check-item.done .check-box { background:var(--clr-5); border-color:var(--clr-5); }
+
+/* ── 투표 섹션 ── */
+.vote-section {
+  margin-top:20px; padding:16px 14px; background:var(--bg); border-radius:14px;
+}
+.vote-title { font-size:13px; font-weight:800; color:var(--text-dark); margin-bottom:3px; }
+.vote-sub   { font-size:11px; color:var(--text-light); margin-bottom:12px; }
+.vote-btn {
+  width:100%; padding:12px; border:none; border-radius:10px;
+  font-size:14px; font-weight:700; color:white; cursor:pointer;
+  transition:filter .15s; margin-bottom:14px;
+}
+.vote-btn:hover:not(:disabled) { filter:brightness(1.1); }
+.vote-btn:disabled { background:var(--border) !important; color:var(--text-light); cursor:default; }
+#card[data-key="usquare"]  .vote-btn { background:var(--clr-1); }
+#card[data-key="yangdong"] .vote-btn { background:var(--clr-2); }
+#card[data-key="sangmu"]   .vote-btn { background:var(--clr-3); }
+#card[data-key="pungam"]   .vote-btn { background:var(--clr-4); }
+#card[data-key="seochang"] .vote-btn { background:var(--clr-5); }
+.vote-bars { display:flex; flex-direction:column; gap:8px; }
+.vb-row { display:flex; align-items:center; gap:8px; }
+.vb-name { font-size:10px; color:var(--text-mid); width:68px; flex-shrink:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.vb-track { flex:1; height:8px; background:var(--border); border-radius:4px; overflow:hidden; }
+.vb-fill  { height:100%; border-radius:4px; min-width:2px; transition:width .45s cubic-bezier(.4,0,.2,1); }
+.vb-count { font-size:10px; font-weight:700; color:var(--text-mid); width:20px; text-align:right; }
+.vb-row.current .vb-name { font-weight:800; color:var(--text-dark); }
+
 /* ── 반응형 ── */
 @media (min-width: 480px) {
   .hero h1 { font-size: 30px; }
@@ -330,6 +404,8 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
 </style>
 </head>
 <body>
+
+<button class="kiosk-btn" id="kiosk-btn" onclick="toggleKiosk()" title="전체화면 전시 모드">⛶</button>
 
 <!-- =========================================================
   화면 1 — 광주 전체 지도
@@ -750,6 +826,9 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
     <div class="card-handle" aria-hidden="true"></div>
     <button class="close-btn" onclick="closeCard()" aria-label="카드 닫기">✕</button>
 
+    <!-- 사진 슬롯 -->
+    <div id="c-photo"></div>
+
     <span class="card-badge" id="c-badge"></span>
     <h2 id="c-title"></h2>
 
@@ -774,12 +853,20 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
     </div>
     <hr class="div">
     <div class="c-row">
-      <div class="c-label">내가 할 수 있는 기록 활동</div>
+      <div class="c-label">✅ 우리가 할 수 있는 기록 활동</div>
       <div class="c-val" id="c-activity"></div>
     </div>
 
-    <div class="record-note">
+    <div class="record-note" id="c-note">
       📷 이 장소를 직접 관찰한다면 사진, 시간대, 이용자 반응을 함께 기록해 보세요.
+    </div>
+
+    <!-- 방문자 투표 -->
+    <div class="vote-section">
+      <div class="vote-title">🗳️ 이 문제, 얼마나 시급하다고 생각하나요?</div>
+      <div class="vote-sub">관람객 1인 1회 투표 · 새로고침해도 유지됩니다</div>
+      <button class="vote-btn" id="vote-btn">👍 이 문제가 시급하다고 생각해요</button>
+      <div class="vote-bars" id="vote-bars"></div>
     </div>
   </div>
 </div>
@@ -794,51 +881,140 @@ const CARDS = {
   usquare: {
     badge: "교통·보행안전",
     title: "U-Square / 광천동 버스터미널",
+    photo: null,  // 현장 사진 경로를 여기에 입력 (예: "photos/usquare.jpg")
     issue: "수만 명이 오가는 환승 거점이지만, 쇼핑몰 동선과 버스 동선이 뒤섞여 있어 보행자가 차도 옆을 걸어야 하는 상황이 반복됩니다.",
     cause: "상업 시설 확장을 중심으로 공간이 설계되면서, 보행자·교통약자 동선이 후순위로 밀렸습니다.",
     who: "대중교통 이용자, 휠체어 사용자, 심야 귀가 여성, 어르신",
     solution: "교통약자 우선 동선 안내 개선, 보행자 횡단 환경 재설계, 심야 안전 귀가 서비스 연계.",
-    activity: "혼잡 시간대 보행 동선 사진 기록 → 위험 구간 지도 제작 → 구청 제안서 작성"
+    activity: ["혼잡 시간대 보행 동선 직접 답사", "위험 구간 사진 기록 및 지도 제작", "구청 교통 부서에 제안서 제출"]
   },
   yangdong: {
     badge: "지역경제·재생",
     title: "양동시장 / 양동",
+    photo: null,
     issue: "점포 공실이 늘고 상인 평균 연령이 높아졌습니다. 오래된 시장은 낡은 공간이 아니라 지역 기억과 생계가 담긴 공간인데, 그 가치가 점점 외면받고 있습니다.",
     cause: "대형마트·온라인 쇼핑으로 방문객이 줄었고, 청년 창업 진입 장벽이 높아 세대 교체도 어렵습니다.",
     who: "시장을 생계 터전으로 삼는 고령 상인, 저렴한 식재료에 의존하는 저소득 주민",
     solution: "지역 SNS 홍보 자원봉사, 청년 팝업 공간 연계 제안, 시장 문화 행사 기획.",
-    activity: "상인 구술 인터뷰 기록 → 공실 현황 사진 → 시장 알리기 카드뉴스 제작"
+    activity: ["상인 구술 인터뷰 기록", "공실 현황 사진 및 데이터 수집", "시장 알리기 카드뉴스 제작·배포"]
   },
   sangmu: {
     badge: "젠트리피케이션",
     title: "상무지구 / 상무동·치평동",
+    photo: null,
     issue: "대형 상업시설이 들어서면서 소규모 가게와 오랜 주거 공간이 밀려나고 있습니다. 화려한 상권 뒤에서 생활 공간이 사라지는 구조입니다.",
     cause: "임대료 상승과 상업화 압력으로, 소상공인과 기존 주민이 감당하기 어려운 환경이 만들어졌습니다.",
     who: "오랫동안 자리를 지켜온 소상공인, 인근 주거 지역 주민, 야간 안전이 필요한 청소년",
     solution: "상권 변화 모니터링 기록, 소상공인 지원 정책 제안, 청소년 안전 취약 구간 조사.",
-    activity: "상가 변화 전후 사진 기록 → 빈 점포 위치 지도 제작 → 지역 변화 아카이브"
+    activity: ["상가 변화 전후 사진 비교 기록", "빈 점포 위치 지도 직접 제작", "지역 변화 아카이브 온라인 공개"]
   },
   pungam: {
     badge: "환경·생태관리",
     title: "풍암호수공원 / 풍암동",
+    photo: null,
     issue: "시민 휴식 공간으로 인기가 높지만, 수질 오염과 쓰레기 투기가 반복되고 있습니다. 관리가 부족한 공원은 불쾌함과 안전 문제를 만들어냅니다.",
     cause: "인근 아파트 개발로 이용자가 급증했지만, 환경 관리 인력과 시설이 수요를 따라가지 못하고 있습니다.",
     who: "공원을 일상 휴식 공간으로 이용하는 주민, 어린이·어르신, 공원 생태계 생물",
     solution: "시민 생태 모니터링 참여, 공원 이용 에티켓 캠페인, 수질 현황 정기 기록.",
-    activity: "수질·식생 상태 사진 기록 → 이용자 행동 관찰 메모 → 시 환경부서 제안"
+    activity: ["수질·식생 상태 정기 사진 기록", "이용자 행동 관찰 및 메모", "시 환경부서에 결과 보고서 제출"]
   },
   seochang: {
     badge: "아동·보행안전",
     title: "서창동 학생 통학로 / 서창동",
+    photo: null,
     issue: "인도가 없거나 불법 주정차로 좁아진 구간에서 학생들이 차도를 걸어야 합니다. 외곽 지역 학생일수록 더 먼 거리를 더 부족한 환경에서 통학합니다.",
     cause: "택지 개발이 먼저 이루어지고, 인도·CCTV 등 보행 인프라가 뒤따라오지 못한 전형적인 신규 택지 문제입니다.",
     who: "서창동 일대 초·중·고 학생, 특히 원거리 통학 학생",
     solution: "위험 구간 민원 제기, 통학로 보행로 확보 요청, 스쿨존 재점검 촉구.",
-    activity: "등하교 시간대 통학로 답사 → 위험 구간 지도 제작 → 학교·구청 공동 발표"
+    activity: ["등하교 시간대 통학로 직접 답사", "위험 구간 사진·영상 기록 및 지도화", "학교·구청 합동 발표 및 개선 요청"]
   }
 };
 
 let activeKey = null;
+
+/* ── 투표 상수 ── */
+const ISSUE_COLORS = { usquare:'#e8345a', yangdong:'#f07818', sangmu:'#7c3aed', pungam:'#16a34a', seochang:'#0284c7' };
+const ISSUE_NAMES  = { usquare:'U-Square', yangdong:'양동시장', sangmu:'상무지구', pungam:'풍암공원', seochang:'서창동' };
+
+/* ── 키오스크(전체화면) ── */
+function toggleKiosk() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(() => {});
+  } else {
+    document.exitFullscreen();
+  }
+}
+document.addEventListener('fullscreenchange', () => {
+  document.getElementById('kiosk-btn').textContent = document.fullscreenElement ? '⊡' : '⛶';
+});
+
+/* ── 사진 슬롯 렌더링 ── */
+function renderPhoto(photo) {
+  const slot = document.getElementById('c-photo');
+  if (photo) {
+    slot.innerHTML = `<img class="card-photo" src="${photo}" alt="현장 사진">`;
+  } else {
+    slot.innerHTML = `<div class="card-photo-ph"><span class="ph-icon">📷</span><span>현장 사진 — 촬영 후 추가 예정</span></div>`;
+  }
+}
+
+/* ── 활동 체크리스트 ── */
+function renderChecklist(key, steps) {
+  const saved = JSON.parse(localStorage.getItem('chk-' + key) || '[]');
+  const done  = saved.filter(Boolean).length;
+  const items = steps.map((s, i) => `
+    <div class="check-item ${saved[i] ? 'done' : ''}" onclick="toggleCheck('${key}',${i},this)">
+      <div class="check-box">${saved[i] ? '✓' : ''}</div>
+      <span class="check-label">${s}</span>
+    </div>`).join('');
+  document.getElementById('c-activity').innerHTML =
+    `<div class="checklist">${items}</div>
+     <div class="check-progress" id="chk-prog-${key}">
+       <span class="prog-done">${done}</span> / ${steps.length} 완료
+     </div>`;
+}
+
+function toggleCheck(key, idx, el) {
+  const saved = JSON.parse(localStorage.getItem('chk-' + key) || '[]');
+  saved[idx] = !saved[idx];
+  localStorage.setItem('chk-' + key, JSON.stringify(saved));
+  el.classList.toggle('done', !!saved[idx]);
+  el.querySelector('.check-box').textContent = saved[idx] ? '✓' : '';
+  const done  = saved.filter(Boolean).length;
+  const total = CARDS[key].activity.length;
+  const prog  = document.getElementById('chk-prog-' + key);
+  if (prog) prog.innerHTML = `<span class="prog-done">${done}</span> / ${total} 완료`;
+}
+
+/* ── 방문자 투표 ── */
+function getVotes() {
+  return JSON.parse(localStorage.getItem('gj-votes') || '{}');
+}
+
+function castVote(key) {
+  const votes = getVotes();
+  votes[key] = (votes[key] || 0) + 1;
+  localStorage.setItem('gj-votes', JSON.stringify(votes));
+  sessionStorage.setItem('voted-' + key, '1');
+  renderVoteBars(key);
+  const btn = document.getElementById('vote-btn');
+  btn.disabled = true;
+  btn.textContent = '✓ 투표 완료! 고마워요';
+}
+
+function renderVoteBars(currentKey) {
+  const votes = getVotes();
+  const keys  = ['usquare','yangdong','sangmu','pungam','seochang'];
+  const max   = Math.max(1, ...keys.map(k => votes[k] || 0));
+  document.getElementById('vote-bars').innerHTML = keys.map(k => `
+    <div class="vb-row ${k === currentKey ? 'current' : ''}">
+      <span class="vb-name">${ISSUE_NAMES[k]}</span>
+      <div class="vb-track">
+        <div class="vb-fill" style="width:${((votes[k]||0)/max*100).toFixed(1)}%;background:${ISSUE_COLORS[k]}"></div>
+      </div>
+      <span class="vb-count">${votes[k]||0}</span>
+    </div>`).join('');
+}
 
 /* ── 화면 전환 ── */
 function clickDistrict(name) {
@@ -853,10 +1029,7 @@ function clickDistrict(name) {
 }
 
 function handleKey(event, name) {
-  if (event.key === 'Enter' || event.key === ' ') {
-    event.preventDefault();
-    clickDistrict(name);
-  }
+  if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); clickDistrict(name); }
 }
 
 function goBack() {
@@ -877,19 +1050,26 @@ function openCard(key) {
   document.getElementById('list-'   + key)?.classList.add('list-active');
 
   const d = CARDS[key];
-  document.getElementById('c-badge').textContent    = d.badge;
-  document.getElementById('c-title').textContent    = d.title;
-  document.getElementById('c-issue').textContent    = d.issue;
-  document.getElementById('c-cause').textContent    = d.cause;
-  document.getElementById('c-who').textContent      = d.who;
+  document.getElementById('card').dataset.key    = key;
+  document.getElementById('c-badge').textContent = d.badge;
+  document.getElementById('c-title').textContent = d.title;
+  document.getElementById('c-issue').textContent = d.issue;
+  document.getElementById('c-cause').textContent = d.cause;
+  document.getElementById('c-who').textContent   = d.who;
   document.getElementById('c-solution').textContent = d.solution;
-  document.getElementById('c-activity').textContent = d.activity;
 
-  document.getElementById('card').dataset.key = key;
+  renderPhoto(d.photo);
+  renderChecklist(key, d.activity);
+  renderVoteBars(key);
+
+  const alreadyVoted = sessionStorage.getItem('voted-' + key);
+  const btn = document.getElementById('vote-btn');
+  btn.disabled    = !!alreadyVoted;
+  btn.textContent = alreadyVoted ? '✓ 투표 완료! 고마워요' : '👍 이 문제가 시급하다고 생각해요';
+  btn.onclick     = () => castVote(key);
+
   document.getElementById('overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
-
-  /* 포커스를 닫기 버튼으로 이동 (접근성) */
   setTimeout(() => document.querySelector('.close-btn')?.focus(), 50);
 }
 
@@ -908,13 +1088,9 @@ function overlayClick(e) {
 }
 
 function handleMarkerKey(event, key) {
-  if (event.key === 'Enter' || event.key === ' ') {
-    event.preventDefault();
-    openCard(key);
-  }
+  if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openCard(key); }
 }
 
-/* ── Escape 키 ── */
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCard(); });
 </script>
 </body>
