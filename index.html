@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>도시는 누구에게 편리한가? — 광주 서구 지역문제 아카이브</title>
+<title>도시는 누구에게 편리한가? — 광주 서구·남구 지역문제 아카이브</title>
 
 <!-- =========================================================
   STYLES
@@ -152,8 +152,9 @@ svg text { pointer-events: none; user-select: none; }
 .district:hover polygon  { filter: brightness(.88); }
 .district:active polygon { filter: brightness(.74); }
 
-/* 서구 강조 */
-#seo-district polygon { stroke-width: 3 !important; }
+/* 서구·남구 강조 */
+#seo-district path { stroke-width: 3 !important; }
+#nam-district path { stroke-width: 3 !important; }
 
 /* ── 사용 안내 ── */
 .guide {
@@ -448,9 +449,9 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
   </div>
 
   <div class="hero-banner">
-    <div class="hero-eyebrow">광주광역시 서구 · 지역문제 아카이브</div>
+    <div class="hero-eyebrow">광주광역시 서구·남구 · 지역문제 아카이브</div>
     <h1 class="hero-title">도시는 누구에게<span class="hero-accent">편리한가?</span></h1>
-    <p class="hero-desc">교통, 시장, 젠트리피케이션, 공원, 통학로—<br>우리가 직접 발로 뛰며 기록한 서구의 사회문제들</p>
+    <p class="hero-desc">교통, 재개발, 젠트리피케이션, 공원, 빈집—<br>우리가 직접 발로 뛰며 기록한 서구·남구의 사회문제들</p>
   </div>
 
   <!-- 인트로 카드 3개 -->
@@ -472,7 +473,7 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
     </div>
   </div>
 
-  <p class="map-hint">↓ 서구를 클릭해서 상세 지도 보기</p>
+  <p class="map-hint">↓ 서구 또는 남구를 클릭해서 상세 지도 보기</p>
 
   <!-- 광주 지도 -->
   <div class="map-card">
@@ -520,13 +521,15 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
         <text x="313.8" y="258" text-anchor="middle" fill="white" font-size="13" font-weight="700" pointer-events="none">동구</text>
       </g>
 
-      <!-- 남구 -->
-      <g class="district" tabindex="0" role="button" aria-label="남구"
+      <!-- 남구 ★ 클릭하면 상세 지도 -->
+      <g class="district" id="nam-district" tabindex="0" role="button"
+         aria-label="남구 — 클릭하면 상세 지도로 이동합니다"
          onclick="clickDistrict('nam')"
          onkeydown="handleKey(event,'nam')">
         <path d="M275.5,204.5 L293.2,240.6 L278.7,263.1 L286.8,293.1 L284.9,302.7 L271.6,318.1 L257.3,325.4 L250.2,319.6 L236.9,332.1 L220.6,325.4 L207.5,347.2 L191.3,352.2 L183.3,369.1 L167.9,369.4 L159.3,354.5 L142.1,367.9 L132.6,364.7 L134.6,339.4 L146.6,335.0 L167.1,300.9 L186.7,301.5 L190.3,298.9 L205.1,280.5 L234.7,270.6 L240.2,255.2 L253.1,259.3 L250.6,208.6 L266.4,198.7 L275.5,204.5Z"
-              fill="var(--c-nam)" stroke="white" stroke-width="1.5" stroke-linejoin="round"/>
-        <text x="220.4" y="305" text-anchor="middle" fill="white" font-size="14" font-weight="700" pointer-events="none">남구</text>
+              fill="var(--c-nam)" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+        <text x="220.4" y="301" text-anchor="middle" fill="white" font-size="12" font-weight="700" pointer-events="none">남구</text>
+        <text x="220.4" y="316" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="9" font-weight="600" pointer-events="none">클릭▶</text>
       </g>
 
     </svg>
@@ -535,22 +538,22 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
   <div class="legend">
     <div class="legend-item"><div class="legend-dot" style="background:var(--c-buk)"></div>북구</div>
     <div class="legend-item"><div class="legend-dot" style="background:var(--c-gwangsan)"></div>광산구</div>
-    <div class="legend-item"><div class="legend-dot" style="background:var(--c-seo)"></div>서구 ★ 상세 지도 제공</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--c-seo)"></div>서구 ★ 상세 지도</div>
     <div class="legend-item"><div class="legend-dot" style="background:var(--c-dong)"></div>동구</div>
-    <div class="legend-item"><div class="legend-dot" style="background:var(--c-nam)"></div>남구</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--c-nam)"></div>남구 ★ 상세 지도</div>
   </div>
 
   <div class="guide">
     <div class="guide-title">사용 방법</div>
     <ol>
-      <li>지도에서 <strong>서구</strong>를 클릭하면 상세 지도 화면으로 이동합니다.</li>
-      <li>서구 지도에서 번호 마커 또는 아래 장소 목록을 클릭하세요.</li>
+      <li>지도에서 <strong>서구</strong> 또는 <strong>남구</strong>를 클릭하면 상세 지도로 이동합니다.</li>
+      <li>상세 지도에서 번호 마커 또는 아래 장소 목록을 클릭하세요.</li>
       <li>각 장소의 문제, 원인, 해결 방법이 담긴 카드가 열립니다.</li>
     </ol>
   </div>
 
   <p class="disclaimer">
-    광주광역시 행정구역 경계는 KOSTAT(통계청) 2012 공개 데이터를 기반으로 합니다. 서구 상세 지도는 면적 비율 기준 도식화입니다.
+    광주광역시 행정구역 경계는 KOSTAT(통계청) 2012 공개 데이터를 기반으로 합니다. 서구·남구 상세 지도는 면적 비율 기준 도식화입니다.
   </p>
 
 </div><!-- /screen-gwangju -->
