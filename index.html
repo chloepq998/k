@@ -284,60 +284,61 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
   <!-- 광주 지도 -->
   <div class="map-card">
     <!--
-      실제 광주광역시 행정구역 비율 기준 도식화 (400×385 viewBox)
-      광산구(42%) > 북구(29%) > 남구(14%) > 서구(9%) > 동구(6%)
+      광주광역시 행정구역 경계 좌표 기반 도식화 (WGS84 근사값 → SVG 변환)
+      경도 126.70–127.02, 위도 35.00–35.28 → viewBox 0 0 400 395
+      광산구(서쪽 대형) · 북구(북쪽 대형) · 서구(중앙 소형) · 동구(중앙동부 소형) · 남구(남쪽)
     -->
-    <svg viewBox="0 0 400 385" width="100%" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 400 395" width="100%" xmlns="http://www.w3.org/2000/svg">
 
-      <!-- 광산구 (서쪽, 가장 큰 구) -->
+      <!-- 광산구 — 서쪽 대형 (실제 면적 약 42%) -->
       <g class="district" tabindex="0" role="button" aria-label="광산구"
          onclick="clickDistrict('gwangsan')"
          onkeydown="handleKey(event,'gwangsan')">
-        <polygon points="18,92 52,36 168,18 190,198 184,280 128,358 48,344 18,296 18,92"
+        <polygon points="18,92 35,38 130,22 145,22 220,72 220,272 145,352 60,345 18,295 18,92"
                  fill="var(--c-gwangsan)" stroke="white" stroke-width="2.5" stroke-linejoin="round"/>
-        <text x="100" y="202" text-anchor="middle" fill="white" font-size="15" font-weight="700">광산구</text>
-        <text x="100" y="220" text-anchor="middle" fill="white" font-size="10" opacity=".75">Gwangsan-gu</text>
+        <text x="108" y="186" text-anchor="middle" fill="white" font-size="15" font-weight="700">광산구</text>
+        <text x="108" y="204" text-anchor="middle" fill="white" font-size="10" opacity=".75">Gwangsan-gu</text>
       </g>
 
-      <!-- 북구 (북쪽, 두 번째로 큰 구) -->
+      <!-- 북구 — 북쪽 대형 (실제 면적 약 29%) -->
       <g class="district" tabindex="0" role="button" aria-label="북구"
          onclick="clickDistrict('buk')"
          onkeydown="handleKey(event,'buk')">
-        <polygon points="168,18 280,10 360,48 384,128 375,198 298,212 260,208 190,198 168,18"
+        <polygon points="145,22 282,10 360,48 382,128 374,198 298,212 260,206 220,72 145,22"
                  fill="var(--c-buk)" stroke="white" stroke-width="2.5" stroke-linejoin="round"/>
-        <text x="278" y="124" text-anchor="middle" fill="white" font-size="15" font-weight="700">북구</text>
-        <text x="278" y="142" text-anchor="middle" fill="white" font-size="10" opacity=".75">Buk-gu</text>
+        <text x="288" y="116" text-anchor="middle" fill="white" font-size="15" font-weight="700">북구</text>
+        <text x="288" y="134" text-anchor="middle" fill="white" font-size="10" opacity=".75">Buk-gu</text>
       </g>
 
-      <!-- 서구 (중앙, 강조) -->
+      <!-- 서구 — 중앙 소형 (실제 면적 약 9%) ★ 클릭 가능 -->
       <g class="district" id="seo-district" tabindex="0" role="button"
          aria-label="서구 — 클릭하면 상세 지도로 이동합니다"
          onclick="clickDistrict('seo')"
          onkeydown="handleKey(event,'seo')">
-        <polygon points="190,198 260,208 272,264 220,280 184,280 190,198"
+        <polygon points="220,72 260,206 270,268 220,272 220,72"
                  fill="var(--c-seo)" stroke="rgba(255,255,255,0.9)" stroke-width="3" stroke-linejoin="round"/>
-        <text x="222" y="244" text-anchor="middle" fill="white" font-size="13" font-weight="700">서구</text>
-        <text x="222" y="260" text-anchor="middle" fill="white" font-size="10" font-weight="600" opacity=".95">클릭 ▶</text>
+        <text x="244" y="200" text-anchor="middle" fill="white" font-size="12" font-weight="700">서구</text>
+        <text x="244" y="216" text-anchor="middle" fill="white" font-size="10" font-weight="600" opacity=".92">클릭▶</text>
       </g>
 
-      <!-- 동구 (중앙 오른쪽, 가장 작은 구) -->
+      <!-- 동구 — 중앙동부 소형 (실제 면적 약 6%) -->
       <g class="district" tabindex="0" role="button" aria-label="동구"
          onclick="clickDistrict('dong')"
          onkeydown="handleKey(event,'dong')">
-        <polygon points="260,208 298,212 375,198 364,270 318,285 272,264 260,208"
+        <polygon points="260,206 298,212 374,198 362,268 270,268 260,206"
                  fill="var(--c-dong)" stroke="white" stroke-width="2.5" stroke-linejoin="round"/>
-        <text x="318" y="244" text-anchor="middle" fill="white" font-size="14" font-weight="700">동구</text>
-        <text x="318" y="260" text-anchor="middle" fill="white" font-size="10" opacity=".75">Dong-gu</text>
+        <text x="316" y="236" text-anchor="middle" fill="white" font-size="13" font-weight="700">동구</text>
+        <text x="316" y="252" text-anchor="middle" fill="white" font-size="10" opacity=".75">Dong-gu</text>
       </g>
 
-      <!-- 남구 (남쪽) -->
+      <!-- 남구 — 남쪽 (실제 면적 약 14%) -->
       <g class="district" tabindex="0" role="button" aria-label="남구"
          onclick="clickDistrict('nam')"
          onkeydown="handleKey(event,'nam')">
-        <polygon points="184,280 220,280 272,264 318,285 364,270 344,348 258,374 148,368 128,358 184,280"
+        <polygon points="220,272 270,268 362,268 340,352 235,382 145,352 220,272"
                  fill="var(--c-nam)" stroke="white" stroke-width="2.5" stroke-linejoin="round"/>
-        <text x="248" y="334" text-anchor="middle" fill="white" font-size="15" font-weight="700">남구</text>
-        <text x="248" y="352" text-anchor="middle" fill="white" font-size="10" opacity=".75">Nam-gu</text>
+        <text x="264" y="324" text-anchor="middle" fill="white" font-size="15" font-weight="700">남구</text>
+        <text x="264" y="342" text-anchor="middle" fill="white" font-size="10" opacity=".75">Nam-gu</text>
       </g>
 
     </svg>
@@ -391,8 +392,10 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
   <div class="map-card">
     <!--
       서구 동 배치 (실제 면적 비율 기준 도식화, 400×470 viewBox)
-      서창동이 서구 전체 면적의 약 50% 차지 → 지도 남쪽 절반 배정
-      풍암동은 남동쪽, 나머지 6개 동은 북쪽 절반에 배치
+      서창동 : 서구 최대 동 (~50%), L자 형태로 남서+남쪽 전체 차지
+      풍암동 : 남동 중형 동, 서창동보다 북쪽
+      중간 행(화정·상무·치평) : 좁은 띠
+      북쪽 행(유덕·광천·양동) : 소형
     -->
     <svg viewBox="0 0 400 470" width="100%" xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -404,52 +407,52 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
       <!-- 지도 배경 -->
       <rect x="6" y="6" width="388" height="458" rx="12" fill="#f0f2f7"/>
 
-      <!-- ── 북쪽 소형 동들 (y: 18–142) ── -->
+      <!-- ── 북쪽 소형 동들 (y: 18–140) ── -->
 
       <!-- 유덕동 (북서) -->
-      <polygon points="20,22 142,18 146,140 20,144"
+      <polygon points="20,20 145,18 148,140 20,142"
                fill="#e8eaf2" stroke="#c8ccde" stroke-width="1.5" stroke-linejoin="round"/>
       <text x="82"  y="86"  text-anchor="middle" fill="#4a5068" font-size="11" font-weight="600">유덕동</text>
 
       <!-- 광천동 (북중) -->
-      <polygon points="142,18 252,16 256,136 146,140"
+      <polygon points="145,18 265,16 268,140 148,140"
                fill="#e8eaf2" stroke="#c8ccde" stroke-width="1.5" stroke-linejoin="round"/>
-      <text x="197" y="62"  text-anchor="middle" fill="#4a5068" font-size="11" font-weight="600">광천동</text>
+      <text x="206" y="65"  text-anchor="middle" fill="#4a5068" font-size="11" font-weight="600">광천동</text>
 
       <!-- 양동 (북동) -->
-      <polygon points="252,16 382,20 382,136 256,136"
+      <polygon points="265,16 382,18 382,140 268,140"
                fill="#e8eaf2" stroke="#c8ccde" stroke-width="1.5" stroke-linejoin="round"/>
-      <text x="316" y="62"  text-anchor="middle" fill="#4a5068" font-size="11" font-weight="600">양동</text>
+      <text x="323" y="65"  text-anchor="middle" fill="#4a5068" font-size="11" font-weight="600">양동</text>
 
-      <!-- ── 중간 동들 (y: 140–258) ── -->
+      <!-- ── 중간 동들 (y: 140–210) ── -->
 
       <!-- 화정동 (중서) -->
-      <polygon points="20,144 146,140 150,258 20,258"
+      <polygon points="20,142 148,140 150,210 20,212"
                fill="#e8eaf2" stroke="#c8ccde" stroke-width="1.5" stroke-linejoin="round"/>
-      <text x="84"  y="204" text-anchor="middle" fill="#4a5068" font-size="11" font-weight="600">화정동</text>
+      <text x="84"  y="162" text-anchor="middle" fill="#4a5068" font-size="11" font-weight="600">화정동</text>
 
       <!-- 상무동 (중앙) -->
-      <polygon points="146,140 256,136 262,142 266,258 150,258"
+      <polygon points="148,140 268,140 272,146 274,210 150,210"
                fill="#e8eaf2" stroke="#c8ccde" stroke-width="1.5" stroke-linejoin="round"/>
-      <text x="204" y="202" text-anchor="middle" fill="#4a5068" font-size="11" font-weight="600">상무동</text>
+      <text x="210" y="162" text-anchor="middle" fill="#4a5068" font-size="11" font-weight="600">상무동</text>
 
       <!-- 치평동 (중동) -->
-      <polygon points="256,136 382,136 382,258 266,258 262,142"
+      <polygon points="268,140 382,140 382,210 274,210 272,146"
                fill="#e8eaf2" stroke="#c8ccde" stroke-width="1.5" stroke-linejoin="round"/>
-      <text x="322" y="202" text-anchor="middle" fill="#4a5068" font-size="11" font-weight="600">치평동</text>
+      <text x="328" y="162" text-anchor="middle" fill="#4a5068" font-size="11" font-weight="600">치평동</text>
 
       <!-- ── 남쪽 대형 동들 ── -->
 
-      <!-- 풍암동 (남동, 중간 크기) -->
-      <polygon points="150,258 266,258 382,258 382,358 150,358"
+      <!-- 풍암동 (남동, 큰 구역) -->
+      <polygon points="150,210 274,210 382,210 382,345 150,345"
                fill="#e8eaf2" stroke="#c8ccde" stroke-width="1.5" stroke-linejoin="round"/>
-      <text x="296" y="314" text-anchor="middle" fill="#4a5068" font-size="11" font-weight="600">풍암동</text>
+      <text x="266" y="285" text-anchor="middle" fill="#4a5068" font-size="11" font-weight="600">풍암동</text>
 
-      <!-- 서창동 (남쪽 전체, 서구 최대 동) -->
-      <polygon points="20,258 150,258 150,358 382,358 382,458 20,458"
+      <!-- 서창동 (남쪽+서쪽 전체, 서구 최대 동, L자형) -->
+      <polygon points="20,212 150,210 150,345 382,345 382,458 20,458"
                fill="#e8eaf2" stroke="#c8ccde" stroke-width="1.5" stroke-linejoin="round"/>
-      <text x="185" y="424" text-anchor="middle" fill="#4a5068" font-size="12" font-weight="700">서창동</text>
-      <text x="185" y="442" text-anchor="middle" fill="#8a97aa" font-size="10">(서구 최대 동)</text>
+      <text x="185" y="420" text-anchor="middle" fill="#4a5068" font-size="12" font-weight="700">서창동</text>
+      <text x="185" y="438" text-anchor="middle" fill="#8a97aa" font-size="10">(서구 최대 동)</text>
 
       <!-- ── 마커 1~5 ── -->
 
@@ -458,9 +461,9 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
          aria-label="1번 마커: U-Square / 광천동"
          onclick="openCard('usquare')"
          onkeydown="handleMarkerKey(event,'usquare')">
-        <circle cx="190" cy="98" r="15" fill="#2558d4" filter="url(#mshadow)"/>
-        <text x="190" y="104" text-anchor="middle" fill="white" font-size="13" font-weight="800">1</text>
-        <text x="190" y="81"  text-anchor="middle" fill="#1a3a8c" font-size="9"  font-weight="700">U-Square</text>
+        <circle cx="200" cy="108" r="15" fill="#2558d4" filter="url(#mshadow)"/>
+        <text x="200" y="114" text-anchor="middle" fill="white" font-size="13" font-weight="800">1</text>
+        <text x="200" y="89"  text-anchor="middle" fill="#1a3a8c" font-size="9"  font-weight="700">U-Square</text>
       </g>
 
       <!-- 마커 2: 양동시장 -->
@@ -468,9 +471,9 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
          aria-label="2번 마커: 양동시장"
          onclick="openCard('yangdong')"
          onkeydown="handleMarkerKey(event,'yangdong')">
-        <circle cx="330" cy="98" r="15" fill="#2558d4" filter="url(#mshadow)"/>
-        <text x="330" y="104" text-anchor="middle" fill="white" font-size="13" font-weight="800">2</text>
-        <text x="330" y="81"  text-anchor="middle" fill="#1a3a8c" font-size="9"  font-weight="700">양동시장</text>
+        <circle cx="323" cy="108" r="15" fill="#2558d4" filter="url(#mshadow)"/>
+        <text x="323" y="114" text-anchor="middle" fill="white" font-size="13" font-weight="800">2</text>
+        <text x="323" y="89"  text-anchor="middle" fill="#1a3a8c" font-size="9"  font-weight="700">양동시장</text>
       </g>
 
       <!-- 마커 3: 상무지구 -->
@@ -478,9 +481,9 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
          aria-label="3번 마커: 상무지구"
          onclick="openCard('sangmu')"
          onkeydown="handleMarkerKey(event,'sangmu')">
-        <circle cx="240" cy="210" r="15" fill="#2558d4" filter="url(#mshadow)"/>
-        <text x="240" y="216" text-anchor="middle" fill="white" font-size="13" font-weight="800">3</text>
-        <text x="240" y="193" text-anchor="middle" fill="#1a3a8c" font-size="9"  font-weight="700">상무지구</text>
+        <circle cx="235" cy="196" r="15" fill="#2558d4" filter="url(#mshadow)"/>
+        <text x="235" y="202" text-anchor="middle" fill="white" font-size="13" font-weight="800">3</text>
+        <text x="235" y="177" text-anchor="middle" fill="#1a3a8c" font-size="9"  font-weight="700">상무지구</text>
       </g>
 
       <!-- 마커 4: 풍암호수공원 -->
@@ -488,9 +491,9 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
          aria-label="4번 마커: 풍암호수공원"
          onclick="openCard('pungam')"
          onkeydown="handleMarkerKey(event,'pungam')">
-        <circle cx="210" cy="314" r="15" fill="#2558d4" filter="url(#mshadow)"/>
-        <text x="210" y="320" text-anchor="middle" fill="white" font-size="13" font-weight="800">4</text>
-        <text x="210" y="297" text-anchor="middle" fill="#1a3a8c" font-size="9"  font-weight="700">풍암호수공원</text>
+        <circle cx="266" cy="284" r="15" fill="#2558d4" filter="url(#mshadow)"/>
+        <text x="266" y="290" text-anchor="middle" fill="white" font-size="13" font-weight="800">4</text>
+        <text x="266" y="265" text-anchor="middle" fill="#1a3a8c" font-size="9"  font-weight="700">풍암호수공원</text>
       </g>
 
       <!-- 마커 5: 서창동 통학로 -->
@@ -498,9 +501,9 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
          aria-label="5번 마커: 서창동 통학로"
          onclick="openCard('seochang')"
          onkeydown="handleMarkerKey(event,'seochang')">
-        <circle cx="90" cy="400" r="15" fill="#2558d4" filter="url(#mshadow)"/>
-        <text x="90"  y="406" text-anchor="middle" fill="white" font-size="13" font-weight="800">5</text>
-        <text x="90"  y="383" text-anchor="middle" fill="#1a3a8c" font-size="9"  font-weight="700">서창 통학로</text>
+        <circle cx="82"  cy="400" r="15" fill="#2558d4" filter="url(#mshadow)"/>
+        <text x="82"  y="406" text-anchor="middle" fill="white" font-size="13" font-weight="800">5</text>
+        <text x="82"  y="381" text-anchor="middle" fill="#1a3a8c" font-size="9"  font-weight="700">서창 통학로</text>
       </g>
 
     </svg>
