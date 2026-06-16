@@ -394,6 +394,44 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
   .intro-card h3 { font-size: 12px; }
   .hero h1 { font-size: 22px; }
 }
+
+/* ── 남구 장소 목록 색상 ── */
+#list-nam_yangnim .loc-num { border-color:#e8345a; color:#e8345a; }
+#list-nam_bongson .loc-num { border-color:#f07818; color:#f07818; }
+#list-nam_baekun  .loc-num { border-color:#7c3aed; color:#7c3aed; }
+#list-nam_daechon .loc-num { border-color:#16a34a; color:#16a34a; }
+#list-nam_wolsan  .loc-num { border-color:#0284c7; color:#0284c7; }
+#list-nam_yangnim:hover .loc-num, #list-nam_yangnim.list-active .loc-num { background:#e8345a; border-color:#e8345a; color:white; }
+#list-nam_bongson:hover .loc-num, #list-nam_bongson.list-active .loc-num { background:#f07818; border-color:#f07818; color:white; }
+#list-nam_baekun:hover  .loc-num, #list-nam_baekun.list-active  .loc-num { background:#7c3aed; border-color:#7c3aed; color:white; }
+#list-nam_daechon:hover .loc-num, #list-nam_daechon.list-active .loc-num { background:#16a34a; border-color:#16a34a; color:white; }
+#list-nam_wolsan:hover  .loc-num, #list-nam_wolsan.list-active  .loc-num { background:#0284c7; border-color:#0284c7; color:white; }
+/* ── 남구 카드 색상 ── */
+#card[data-key="nam_yangnim"] .card-badge { background:#fde0e6; color:#e8345a; }
+#card[data-key="nam_yangnim"] .card-top-bar { background:#e8345a; }
+#card[data-key="nam_yangnim"] .vote-btn { background:#e8345a; }
+#card[data-key="nam_yangnim"] .check-item.done .check-box { background:#e8345a; border-color:#e8345a; }
+#card[data-key="nam_yangnim"] .record-note { border-color:#e8345a; }
+#card[data-key="nam_bongson"] .card-badge { background:#fff0e0; color:#f07818; }
+#card[data-key="nam_bongson"] .card-top-bar { background:#f07818; }
+#card[data-key="nam_bongson"] .vote-btn { background:#f07818; }
+#card[data-key="nam_bongson"] .check-item.done .check-box { background:#f07818; border-color:#f07818; }
+#card[data-key="nam_bongson"] .record-note { border-color:#f07818; }
+#card[data-key="nam_baekun"] .card-badge { background:#ede9fe; color:#7c3aed; }
+#card[data-key="nam_baekun"] .card-top-bar { background:#7c3aed; }
+#card[data-key="nam_baekun"] .vote-btn { background:#7c3aed; }
+#card[data-key="nam_baekun"] .check-item.done .check-box { background:#7c3aed; border-color:#7c3aed; }
+#card[data-key="nam_baekun"] .record-note { border-color:#7c3aed; }
+#card[data-key="nam_daechon"] .card-badge { background:#dcfce7; color:#16a34a; }
+#card[data-key="nam_daechon"] .card-top-bar { background:#16a34a; }
+#card[data-key="nam_daechon"] .vote-btn { background:#16a34a; }
+#card[data-key="nam_daechon"] .check-item.done .check-box { background:#16a34a; border-color:#16a34a; }
+#card[data-key="nam_daechon"] .record-note { border-color:#16a34a; }
+#card[data-key="nam_wolsan"] .card-badge { background:#e0f2fe; color:#0284c7; }
+#card[data-key="nam_wolsan"] .card-top-bar { background:#0284c7; }
+#card[data-key="nam_wolsan"] .vote-btn { background:#0284c7; }
+#card[data-key="nam_wolsan"] .check-item.done .check-box { background:#0284c7; border-color:#0284c7; }
+#card[data-key="nam_wolsan"] .record-note { border-color:#0284c7; }
 </style>
 </head>
 <body>
@@ -797,6 +835,270 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
 
 
 <!-- =========================================================
+  화면 3 — 남구 상세 지도
+========================================================= -->
+<div class="screen" id="screen-nam">
+
+  <div class="breadcrumb">
+    <span>광주 전체</span>
+    <span style="color:var(--border)">›</span>
+    <span class="cur">남구 상세 보기</span>
+  </div>
+
+  <button class="back-btn" onclick="goBack()" aria-label="광주 전체 지도로 돌아가기">
+    ← 광주 전체 지도
+  </button>
+
+  <div class="sec-header">
+    <h1>남구 지역문제 상세 지도</h1>
+    <p>마커를 클릭하면 문제 카드가 열립니다</p>
+  </div>
+
+  <!-- 컬러 범례 -->
+  <div class="legend" style="max-width:520px;width:100%;margin-bottom:4px;">
+    <span class="legend-item"><span class="legend-dot" style="background:#e8345a"></span>관광·도시재생</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#f07818"></span>교통·주차</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#7c3aed"></span>주거·재개발</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#16a34a"></span>농촌·교통취약</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#0284c7"></span>빈집·도시쇠퇴</span>
+  </div>
+
+  <!-- 남구 지도 -->
+  <div class="map-card">
+    <svg viewBox="0 0 400 460" width="100%" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="mshadow-nam" x="-30%" y="-30%" width="160%" height="160%">
+          <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,.16)"/>
+        </filter>
+      </defs>
+
+      <!-- 지도 배경 -->
+      <rect x="6" y="6" width="388" height="448" rx="12" fill="#f0f2f7"/>
+
+      <!-- 양림동 (빨강 틴트) -->
+      <path d="M349.9,75.8 L356.0,91.1 L337.8,104.6 L333.8,99.0 L333.8,82.1 L346.7,69.1 L349.9,75.8Z"
+            fill="#fde0e6" stroke="#f0a0b0" stroke-width="1" stroke-linejoin="round"/>
+      <text x="344.0" y="89" text-anchor="middle" fill="#5a6070" font-size="9" font-weight="600" pointer-events="none">양림동</text>
+
+      <!-- 방림1동 (빨강 틴트) -->
+      <path d="M343.6,121.2 L336.7,104.8 L337.8,104.6 L356.0,91.1 L358.9,99.4 L343.6,121.2Z"
+            fill="#fde0e6" stroke="#f0a0b0" stroke-width="1" stroke-linejoin="round"/>
+      <text x="346.1" y="111" text-anchor="middle" fill="#5a6070" font-size="9" font-weight="600" pointer-events="none">방림1동</text>
+
+      <!-- 방림2동 -->
+      <path d="M370.1,124.8 L374.9,137.4 L364.5,143.9 L348.5,133.1 L343.6,121.2 L358.9,99.4 L370.1,124.8Z"
+            fill="#e8eaf2" stroke="#b8bdd0" stroke-width="1" stroke-linejoin="round"/>
+      <text x="361.5" y="130" text-anchor="middle" fill="#5a6070" font-size="9" font-weight="600" pointer-events="none">방림2동</text>
+
+      <!-- 사직동 -->
+      <path d="M346.7,69.1 L333.8,82.1 L321.1,65.5 L325.6,47.3 L334.7,44.4 L342.1,62.1 L346.7,69.1Z"
+            fill="#e8eaf2" stroke="#b8bdd0" stroke-width="1" stroke-linejoin="round"/>
+      <text x="335.8" y="63" text-anchor="middle" fill="#5a6070" font-size="9" font-weight="600" pointer-events="none">사직동</text>
+
+      <!-- 월산동 (파랑 틴트) -->
+      <path d="M325.6,47.3 L321.1,65.5 L318.7,80.8 L312.0,85.9 L307.9,63.7 L303.5,36.5 L302.9,34.9 L307.1,31.3 L325.6,47.3Z"
+            fill="#e0f2fe" stroke="#7dd3fc" stroke-width="1" stroke-linejoin="round"/>
+      <text x="313.8" y="55" text-anchor="middle" fill="#5a6070" font-size="9" font-weight="600" pointer-events="none">월산동</text>
+
+      <!-- 월산4동 (파랑 틴트) -->
+      <path d="M307.9,63.7 L292.2,76.9 L289.8,72.9 L287.0,52.2 L303.5,36.5 L307.9,63.7Z"
+            fill="#e0f2fe" stroke="#7dd3fc" stroke-width="1" stroke-linejoin="round"/>
+      <text x="298.0" y="61" text-anchor="middle" fill="#5a6070" font-size="9" font-weight="600" pointer-events="none">월산4동</text>
+
+      <!-- 월산5동 -->
+      <path d="M307.9,63.7 L312.0,85.9 L308.6,93.6 L292.2,76.9 L307.9,63.7Z"
+            fill="#e8eaf2" stroke="#b8bdd0" stroke-width="1" stroke-linejoin="round"/>
+      <text x="305.7" y="78" text-anchor="middle" fill="#5a6070" font-size="9" font-weight="600" pointer-events="none">월산5동</text>
+
+      <!-- 백운1동 (보라 틴트) -->
+      <path d="M333.8,82.1 L333.8,99.0 L318.7,80.8 L321.1,65.5 L333.8,82.1Z"
+            fill="#ede9fe" stroke="#c0a8f0" stroke-width="1" stroke-linejoin="round"/>
+      <text x="328.2" y="82" text-anchor="middle" fill="#5a6070" font-size="9" font-weight="600" pointer-events="none">백운1동</text>
+
+      <!-- 백운2동 (보라 틴트) -->
+      <path d="M333.8,99.0 L337.8,104.6 L336.7,104.8 L317.5,107.5 L312.5,102.1 L308.6,93.6 L312.0,85.9 L318.7,80.8 L333.8,99.0Z"
+            fill="#ede9fe" stroke="#c0a8f0" stroke-width="1" stroke-linejoin="round"/>
+      <text x="323.5" y="98" text-anchor="middle" fill="#5a6070" font-size="9" font-weight="600" pointer-events="none">백운2동</text>
+
+      <!-- 주월1동 -->
+      <path d="M317.5,107.5 L326.6,138.5 L322.0,145.2 L290.9,156.0 L290.4,117.8 L312.5,102.1 L317.5,107.5Z"
+            fill="#e8eaf2" stroke="#b8bdd0" stroke-width="1" stroke-linejoin="round"/>
+      <text x="311.1" y="129" text-anchor="middle" fill="#5a6070" font-size="9" font-weight="600" pointer-events="none">주월1동</text>
+
+      <!-- 주월2동 -->
+      <path d="M289.8,72.9 L292.2,76.9 L308.6,93.6 L312.5,102.1 L290.4,117.8 L281.0,91.1 L289.8,72.9Z"
+            fill="#e8eaf2" stroke="#b8bdd0" stroke-width="1" stroke-linejoin="round"/>
+      <text x="294.9" y="94" text-anchor="middle" fill="#5a6070" font-size="9" font-weight="600" pointer-events="none">주월2동</text>
+
+      <!-- 효덕동 -->
+      <path d="M322.0,145.2 L324.2,173.3 L338.8,180.5 L342.9,218.5 L357.0,256.2 L353.1,278.9 L312.9,321.6 L286.0,266.8 L283.6,236.5 L306.8,206.1 L289.7,175.3 L290.9,156.0 L322.0,145.2Z"
+            fill="#e8eaf2" stroke="#b8bdd0" stroke-width="1" stroke-linejoin="round"/>
+      <text x="317.7" y="216" text-anchor="middle" fill="#5a6070" font-size="9" font-weight="600" pointer-events="none">효덕동</text>
+
+      <!-- 송암동 -->
+      <path d="M289.7,175.3 L306.8,206.1 L283.6,236.5 L286.0,266.8 L261.7,274.9 L235.9,214.4 L222.2,217.1 L243.8,206.4 L263.9,165.9 L289.7,175.3Z"
+            fill="#e8eaf2" stroke="#b8bdd0" stroke-width="1" stroke-linejoin="round"/>
+      <text x="268.3" y="218" text-anchor="middle" fill="#5a6070" font-size="9" font-weight="600" pointer-events="none">송암동</text>
+
+      <!-- 봉선1동 (주황 틴트) -->
+      <path d="M343.6,121.2 L348.5,133.1 L326.6,138.5 L317.5,107.5 L336.7,104.8 L343.6,121.2Z"
+            fill="#fff0e0" stroke="#f0c080" stroke-width="1" stroke-linejoin="round"/>
+      <text x="336.1" y="121" text-anchor="middle" fill="#5a6070" font-size="9" font-weight="600" pointer-events="none">봉선1동</text>
+
+      <!-- 봉선2동 (주황 틴트) -->
+      <path d="M364.5,143.9 L338.8,180.5 L324.2,173.3 L322.0,145.2 L326.6,138.5 L348.5,133.1 L364.5,143.9Z"
+            fill="#fff0e0" stroke="#f0c080" stroke-width="1" stroke-linejoin="round"/>
+      <text x="341.3" y="152" text-anchor="middle" fill="#5a6070" font-size="9" font-weight="600" pointer-events="none">봉선2동</text>
+
+      <!-- 대촌동 (초록 틴트) -->
+      <path d="M286.0,266.8 L312.9,321.6 L298.2,333.7 L284.0,319.6 L257.2,349.5 L224.9,333.7 L198.8,386.1 L166.2,398.0 L150.7,436.4 L119.7,438.7 L102.4,403.0 L68.0,435.5 L45.8,420.9 L48.8,387.4 L25.1,409.9 L25.6,372.6 L53.1,367.0 L77.0,356.4 L117.9,274.9 L151.9,281.4 L186.1,249.9 L188.7,231.1 L222.2,217.1 L235.9,214.4 L261.7,274.9 L286.0,266.8Z"
+            fill="#dcfce7" stroke="#86efac" stroke-width="1" stroke-linejoin="round"/>
+      <text x="169.0" y="340" text-anchor="middle" fill="#5a6070" font-size="10" font-weight="700" pointer-events="none">대촌동</text>
+
+      <!-- ── 마커 1~5 ── -->
+
+      <!-- 마커 1: 양림동 (관광·도시재생 #e8345a) -->
+      <g class="marker" id="marker-nam_yangnim" tabindex="0" role="button"
+         aria-label="1번 마커: 양림동 역사문화마을"
+         onclick="openCard('nam_yangnim')"
+         onkeydown="handleMarkerKey(event,'nam_yangnim')">
+        <circle cx="348" cy="92" r="15" fill="none" stroke="#e8345a" stroke-width="2" opacity="0">
+          <animate attributeName="r" values="15;32" dur="2s" repeatCount="indefinite" begin="0s"/>
+          <animate attributeName="opacity" values="0.7;0" dur="2s" repeatCount="indefinite" begin="0s"/>
+        </circle>
+        <circle cx="348" cy="92" r="15" fill="#e8345a" filter="url(#mshadow-nam)"/>
+        <text x="348" y="98" text-anchor="middle" fill="white" font-size="13" font-weight="800" pointer-events="none">1</text>
+        <text x="348" y="73" text-anchor="middle" fill="#c01040" font-size="9" font-weight="700" pointer-events="none">양림동</text>
+      </g>
+
+      <!-- 마커 2: 봉선동 (교통·주차 #f07818) -->
+      <g class="marker" id="marker-nam_bongson" tabindex="0" role="button"
+         aria-label="2번 마커: 봉선 상업지구"
+         onclick="openCard('nam_bongson')"
+         onkeydown="handleMarkerKey(event,'nam_bongson')">
+        <circle cx="340" cy="152" r="15" fill="none" stroke="#f07818" stroke-width="2" opacity="0">
+          <animate attributeName="r" values="15;32" dur="2s" repeatCount="indefinite" begin="0.4s"/>
+          <animate attributeName="opacity" values="0.7;0" dur="2s" repeatCount="indefinite" begin="0.4s"/>
+        </circle>
+        <circle cx="340" cy="152" r="15" fill="#f07818" filter="url(#mshadow-nam)"/>
+        <text x="340" y="158" text-anchor="middle" fill="white" font-size="13" font-weight="800" pointer-events="none">2</text>
+        <text x="340" y="133" text-anchor="middle" fill="#a05010" font-size="9" font-weight="700" pointer-events="none">봉선동</text>
+      </g>
+
+      <!-- 마커 3: 백운동 (주거·재개발 #7c3aed) -->
+      <g class="marker" id="marker-nam_baekun" tabindex="0" role="button"
+         aria-label="3번 마커: 백운광장 일대"
+         onclick="openCard('nam_baekun')"
+         onkeydown="handleMarkerKey(event,'nam_baekun')">
+        <circle cx="313" cy="100" r="15" fill="none" stroke="#7c3aed" stroke-width="2" opacity="0">
+          <animate attributeName="r" values="15;32" dur="2s" repeatCount="indefinite" begin="0.8s"/>
+          <animate attributeName="opacity" values="0.7;0" dur="2s" repeatCount="indefinite" begin="0.8s"/>
+        </circle>
+        <circle cx="313" cy="100" r="15" fill="#7c3aed" filter="url(#mshadow-nam)"/>
+        <text x="313" y="106" text-anchor="middle" fill="white" font-size="13" font-weight="800" pointer-events="none">3</text>
+        <text x="313" y="81" text-anchor="middle" fill="#5a1ebd" font-size="9" font-weight="700" pointer-events="none">백운동</text>
+      </g>
+
+      <!-- 마커 4: 대촌동 (농촌·교통취약 #16a34a) -->
+      <g class="marker" id="marker-nam_daechon" tabindex="0" role="button"
+         aria-label="4번 마커: 대촌동 농촌마을"
+         onclick="openCard('nam_daechon')"
+         onkeydown="handleMarkerKey(event,'nam_daechon')">
+        <circle cx="160" cy="340" r="15" fill="none" stroke="#16a34a" stroke-width="2" opacity="0">
+          <animate attributeName="r" values="15;32" dur="2s" repeatCount="indefinite" begin="1.2s"/>
+          <animate attributeName="opacity" values="0.7;0" dur="2s" repeatCount="indefinite" begin="1.2s"/>
+        </circle>
+        <circle cx="160" cy="340" r="15" fill="#16a34a" filter="url(#mshadow-nam)"/>
+        <text x="160" y="346" text-anchor="middle" fill="white" font-size="13" font-weight="800" pointer-events="none">4</text>
+        <text x="160" y="321" text-anchor="middle" fill="#0a6030" font-size="9" font-weight="700" pointer-events="none">대촌동</text>
+      </g>
+
+      <!-- 마커 5: 월산동 (빈집·도시쇠퇴 #0284c7) -->
+      <g class="marker" id="marker-nam_wolsan" tabindex="0" role="button"
+         aria-label="5번 마커: 월산동 구도심"
+         onclick="openCard('nam_wolsan')"
+         onkeydown="handleMarkerKey(event,'nam_wolsan')">
+        <circle cx="303" cy="48" r="15" fill="none" stroke="#0284c7" stroke-width="2" opacity="0">
+          <animate attributeName="r" values="15;32" dur="2s" repeatCount="indefinite" begin="1.6s"/>
+          <animate attributeName="opacity" values="0.7;0" dur="2s" repeatCount="indefinite" begin="1.6s"/>
+        </circle>
+        <circle cx="303" cy="48" r="15" fill="#0284c7" filter="url(#mshadow-nam)"/>
+        <text x="303" y="54" text-anchor="middle" fill="white" font-size="13" font-weight="800" pointer-events="none">5</text>
+        <text x="303" y="29" text-anchor="middle" fill="#015080" font-size="9" font-weight="700" pointer-events="none">월산동</text>
+      </g>
+
+    </svg>
+  </div>
+
+  <!-- 장소 목록 -->
+  <div class="loc-list" role="list">
+
+    <div class="loc-item" id="list-nam_yangnim" tabindex="0" role="listitem button"
+         aria-label="1번 장소: 양림동 역사문화마을 카드 열기"
+         onclick="openCard('nam_yangnim')"
+         onkeydown="handleMarkerKey(event,'nam_yangnim')">
+      <span class="loc-num" aria-hidden="true">1</span>
+      <div class="loc-text">
+        <div class="loc-name">양림동 역사문화마을 / 양림동</div>
+        <div class="loc-tag">관광·도시재생</div>
+      </div>
+      <span class="loc-chevron" aria-hidden="true">›</span>
+    </div>
+
+    <div class="loc-item" id="list-nam_bongson" tabindex="0" role="listitem button"
+         aria-label="2번 장소: 봉선 상업지구 카드 열기"
+         onclick="openCard('nam_bongson')"
+         onkeydown="handleMarkerKey(event,'nam_bongson')">
+      <span class="loc-num" aria-hidden="true">2</span>
+      <div class="loc-text">
+        <div class="loc-name">봉선 상업지구 / 봉선1·2동</div>
+        <div class="loc-tag">교통·주차</div>
+      </div>
+      <span class="loc-chevron" aria-hidden="true">›</span>
+    </div>
+
+    <div class="loc-item" id="list-nam_baekun" tabindex="0" role="listitem button"
+         aria-label="3번 장소: 백운광장 일대 카드 열기"
+         onclick="openCard('nam_baekun')"
+         onkeydown="handleMarkerKey(event,'nam_baekun')">
+      <span class="loc-num" aria-hidden="true">3</span>
+      <div class="loc-text">
+        <div class="loc-name">백운광장 일대 / 백운1·2동</div>
+        <div class="loc-tag">주거·재개발</div>
+      </div>
+      <span class="loc-chevron" aria-hidden="true">›</span>
+    </div>
+
+    <div class="loc-item" id="list-nam_daechon" tabindex="0" role="listitem button"
+         aria-label="4번 장소: 대촌동 농촌마을 카드 열기"
+         onclick="openCard('nam_daechon')"
+         onkeydown="handleMarkerKey(event,'nam_daechon')">
+      <span class="loc-num" aria-hidden="true">4</span>
+      <div class="loc-text">
+        <div class="loc-name">대촌동 농촌마을 / 대촌동</div>
+        <div class="loc-tag">농촌·교통취약</div>
+      </div>
+      <span class="loc-chevron" aria-hidden="true">›</span>
+    </div>
+
+    <div class="loc-item" id="list-nam_wolsan" tabindex="0" role="listitem button"
+         aria-label="5번 장소: 월산동 구도심 카드 열기"
+         onclick="openCard('nam_wolsan')"
+         onkeydown="handleMarkerKey(event,'nam_wolsan')">
+      <span class="loc-num" aria-hidden="true">5</span>
+      <div class="loc-text">
+        <div class="loc-name">월산동 구도심 / 월산동</div>
+        <div class="loc-tag">빈집·도시쇠퇴</div>
+      </div>
+      <span class="loc-chevron" aria-hidden="true">›</span>
+    </div>
+
+  </div>
+
+</div><!-- /screen-nam -->
+
+
+<!-- =========================================================
   카드 오버레이
 ========================================================= -->
 <div class="overlay" id="overlay" onclick="overlayClick(event)" role="dialog" aria-modal="true" aria-labelledby="c-title">
@@ -906,14 +1208,70 @@ const CARDS = {
     who: "서창동 일대 초·중·고 학생, 특히 원거리 통학 학생",
     solution: "위험 구간 민원 제기, 통학로 보행로 확보 요청, 스쿨존 재점검 촉구.",
     activity: ["등하교 시간대 통학로 직접 답사", "위험 구간 사진·영상 기록 및 지도화", "학교·구청 합동 발표 및 개선 요청"]
+  },
+  nam_yangnim: {
+    badge: "관광·도시재생",
+    title: "양림동 역사문화마을 / 양림동·방림1동",
+    photo: null,
+    issue: "근대 역사 건축물이 밀집한 양림동이 관광지로 알려지면서, 카페·숍이 늘고 주민 생활 공간이 줄어들고 있습니다. 문화가 자원이 되는 동시에 원주민은 밀려납니다.",
+    cause: "역사문화마을 지정 이후 상업화 압력이 커졌고, 임대료 상승이 오래된 주민과 소규모 가게를 내몰고 있습니다.",
+    who: "양림동 오랜 거주 주민, 원래 있던 소규모 가게 운영자, 고령 시민",
+    solution: "문화재 보존과 주민 생활 공간 균형 정책 요구, 과도한 상업화 모니터링, 지역 기억 보존 활동.",
+    activity: ["관광 전후 골목 변화 사진 비교 기록", "주민 인터뷰로 생활 공간 침해 사례 수집", "양림동 아카이브 전시 기획 참여"]
+  },
+  nam_bongson: {
+    badge: "교통·주차",
+    title: "봉선 상업지구 / 봉선1동·봉선2동",
+    photo: null,
+    issue: "음식점·카페가 밀집한 봉선동 상권은 주말마다 극심한 주차 혼잡을 겪습니다. 불법 주정차로 좁아진 도로에서 보행자와 차량이 뒤섞입니다.",
+    cause: "상업 시설 증가 속도를 주차 공간 공급이 따라가지 못했고, 인근 주거지 도로가 주차장처럼 사용되고 있습니다.",
+    who: "봉선동 인근 주거 주민, 주말 방문객, 보행 중인 어린이·어르신",
+    solution: "공영 주차장 확충 요구, 주거지 불법 주정차 단속 강화, 보행 우선 구간 지정 제안.",
+    activity: ["주말 혼잡 시간대 주차·보행 현황 사진 기록", "불법 주정차 위치 지도 제작", "구청 교통과에 개선 요청서 제출"]
+  },
+  nam_baekun: {
+    badge: "주거·재개발",
+    title: "백운광장 일대 / 백운1동·백운2동",
+    photo: null,
+    issue: "노후 주택이 밀집한 백운동 일대에서 재개발 논의가 진행 중입니다. 새 건물이 들어서면 오래 살아온 주민들이 보증금·임대료를 감당하지 못해 떠나야 합니다.",
+    cause: "노후화된 주거 환경 개선이 필요하지만, 재개발 이익이 원주민보다 개발업체에 집중되는 구조가 반복됩니다.",
+    who: "저소득 임차인, 노후 주택 거주 고령 주민, 수십 년 살아온 장기 거주자",
+    solution: "임차인 권리 강화 정책 요구, 공공 임대 주택 공급 촉구, 재개발 과정 투명성 감시.",
+    activity: ["노후 주거지 실태 사진 기록", "재개발 찬반 주민 의견 설문·인터뷰", "공청회 참석 및 의견서 제출"]
+  },
+  nam_daechon: {
+    badge: "농촌·교통취약",
+    title: "대촌동 농촌마을 / 대촌동",
+    photo: null,
+    issue: "광주 유일의 농촌 지역인 대촌동은 버스 노선이 적어 자가용 없이는 이동이 어렵습니다. 고령 농민은 병원·시장을 가기 위해 몇 시간을 기다려야 합니다.",
+    cause: "도시 확장의 혜택이 외곽 농촌 지역까지 미치지 못하고, 대중교통 수요가 적다는 이유로 노선 감소가 반복됩니다.",
+    who: "대촌동 고령 농민, 자가용 없는 주민, 의료·복지 서비스가 필요한 취약계층",
+    solution: "수요 응답형 소형버스 도입 요구, 농촌 지역 공공 의료·복지 서비스 접근성 개선 제안.",
+    activity: ["버스 배차 간격·노선 현황 직접 조사", "주민 이동 불편 사례 인터뷰", "교통 취약 농촌 지도 제작·발표"]
+  },
+  nam_wolsan: {
+    badge: "빈집·도시쇠퇴",
+    title: "월산동 구도심 / 월산동·월산4동",
+    photo: null,
+    issue: "인구가 줄면서 빈집과 공실 상가가 늘어나고, 방치된 건물이 우범 공간이 되거나 미관을 해치고 있습니다. 골목 상권도 함께 사라지고 있습니다.",
+    cause: "신도심·외곽 개발로 인구가 빠져나갔고, 빈집에 대한 체계적 관리 정책이 부족합니다.",
+    who: "남아있는 주거 주민(특히 어르신), 골목 상권 소상공인, 지역 공동체 구성원",
+    solution: "빈집 실태 조사 및 공공 활용 방안 제안, 커뮤니티 공간 조성, 골목 재생 프로그램 기획.",
+    activity: ["빈집·공실 현황 직접 조사 및 사진 기록", "5년 전후 거리 변화 사진 비교", "빈집 활용 아이디어 주민 제안 공모"]
   }
 };
 
 let activeKey = null;
 
 /* ── 투표 상수 ── */
-const ISSUE_COLORS = { usquare:'#e8345a', yangdong:'#f07818', sangmu:'#7c3aed', pungam:'#16a34a', seochang:'#0284c7' };
-const ISSUE_NAMES  = { usquare:'U-Square', yangdong:'양동시장', sangmu:'상무지구', pungam:'풍암공원', seochang:'서창동' };
+const ISSUE_COLORS = {
+  usquare:'#e8345a', yangdong:'#f07818', sangmu:'#7c3aed', pungam:'#16a34a', seochang:'#0284c7',
+  nam_yangnim:'#e8345a', nam_bongson:'#f07818', nam_baekun:'#7c3aed', nam_daechon:'#16a34a', nam_wolsan:'#0284c7'
+};
+const ISSUE_NAMES = {
+  usquare:'U-Square', yangdong:'양동시장', sangmu:'상무지구', pungam:'풍암공원', seochang:'서창동',
+  nam_yangnim:'양림동', nam_bongson:'봉선동', nam_baekun:'백운동', nam_daechon:'대촌동', nam_wolsan:'월산동'
+};
 
 /* ── 키오스크(전체화면) ── */
 function toggleKiosk() {
@@ -983,8 +1341,9 @@ function castVote(key) {
 
 function renderVoteBars(currentKey) {
   const votes = getVotes();
-  const keys  = ['usquare','yangdong','sangmu','pungam','seochang'];
-  const max   = Math.max(1, ...keys.map(k => votes[k] || 0));
+  const isNam = currentKey.startsWith('nam_');
+  const keys = Object.keys(ISSUE_COLORS).filter(k => k.startsWith('nam_') === isNam);
+  const max = Math.max(1, ...keys.map(k => votes[k] || 0));
   document.getElementById('vote-bars').innerHTML = keys.map(k => `
     <div class="vb-row ${k === currentKey ? 'current' : ''}">
       <span class="vb-name">${ISSUE_NAMES[k]}</span>
@@ -997,12 +1356,12 @@ function renderVoteBars(currentKey) {
 
 /* ── 화면 전환 ── */
 function clickDistrict(name) {
-  if (name === 'seo') {
+  if (name === 'seo' || name === 'nam') {
     document.getElementById('screen-gwangju').classList.remove('active');
-    document.getElementById('screen-seo').classList.add('active');
+    document.getElementById('screen-' + name).classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   } else {
-    const labels = { buk:'북구', gwangsan:'광산구', dong:'동구', nam:'남구' };
+    const labels = { buk:'북구', gwangsan:'광산구', dong:'동구' };
     alert(`${labels[name]} 상세 지도는 다음 버전에서 공개됩니다.`);
   }
 }
@@ -1013,7 +1372,7 @@ function handleKey(event, name) {
 
 function goBack() {
   closeCard();
-  document.getElementById('screen-seo').classList.remove('active');
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-gwangju').classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
