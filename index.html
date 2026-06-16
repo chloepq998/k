@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>광주광역시 사회문제 지도</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; background: #f0f4f8; min-height: 100vh; }
+
+  .screen { display: none; width: 100%; min-height: 100vh; padding: 24px 16px; }
+  .screen.active { display: flex; flex-direction: column; align-items: center; }
+
+  h1 { font-size: 22px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; letter-spacing: -0.5px; }
+  .subtitle { font-size: 12px; color: #888; margin-bottom: 20px; }
+
+  svg text { pointer-events: none; user-select: none; }
+
+  /* 광주 전체 지도 */
+  .map-container { background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); padding: 16px; width: 100%; max-width: 480px; }
+
+  .district path, .district polygon {
+    cursor: pointer;
+    transition: fill 0.2s, filter 0.2s;
+  }
+  .district:hover path, .district:hover polygon { filter: brightness(0.9); }
+
+  /* 서구 상세 */
+  .back-btn {
+    display: flex; align-items: center; gap: 6px;
+    background: none; border: none; cursor: pointer;
+    font-size: 14px; color: #555; margin-bottom: 16px;
+    padding: 6px 10px; border-radius: 8px;
+    transition: background 0.15s;
+    align-self: flex-start;
+  }
+  .back-btn:hover { background: #e8edf2; }
+
+  /* 마커 */
+  .marker {
+    cursor: pointer;
+    transition: transform 0.15s;
+    transform-origin: center;
+  }
+  .marker:hover { transform: scale(1.2); }
+  .marker circle { transition: r 0.15s; }
+
+  /* 카드 오버레이 */
+  .overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 100;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 0;
+  }
+  .overlay.open { display: flex; }
+
+  .card {
+    background: white;
+    border-radius: 20px 20px 0 0;
+    padding: 28px 20px 40px;
+    width: 100%; max-width: 520px;
+    animation: slideUp 0.25s ease;
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+  @keyframes slideUp {
+    from { transform: translateY(40px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .card-handle { width: 40px; height: 4px; background: #ddd; border-radius: 2px; margin: 0 auto 20px; }
+
+  .card-badge {
+    display: inline-block;
+    font-size: 11px; font-weight: 600;
+    padding: 3px 10px; border-radius: 20px;
+    margin-bottom: 10px;
+    background: #ffe0e0; color: #c0392b;
+  }
+  .card h2 { font-size: 18px; font-weight: 700; color: #1a1a2e; margin-bottom: 16px; }
+
+  .card-section { margin-bottom: 14px; }
+  .card-section-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+    color: #888; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .card-section-content { font-size: 14px; color: #333; line-height: 1.6; }
+
+  .card-divider { border: none; border-top: 1px solid #f0f0f0; margin: 12px 0; }
+
+  .activity-tag {
+    display: inline-block;
+    background: #e8f4fd; color: #2980b9;
+    font-size: 12px; font-weight: 600;
+    padding: 4px 12px; border-radius: 20px; margin-top: 4px;
+  }
+
+  .close-btn {
+    position: absolute; top: 16px; right: 16px;
+    background: #f0f0f0; border: none; border-radius: 50%;
+    width: 32px; height: 32px; font-size: 16px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    color: #666;
+  }
+
+  .legend { display: flex; gap: 16px; margin-top: 12px; flex-wrap: wrap; justify-content: center; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #555; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+  @media (min-width: 500px) {
+    h1 { font-size: 26px; }
+    .card { padding: 32px 28px 48px; }
+    .card h2 { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== 화면 1: 광주 전체 지도 ===== -->
+<div class="screen active" id="screen-gwangju">
+  <h1>광주광역시</h1>
+  <p class="subtitle">구를 클릭하면 상세 지도로 이동합니다</p>
+  <div class="map-container">
+    <svg viewBox="0 0 400 420" width="100%" xmlns="http://www.w3.org/2000/svg">
+
+      <!-- 북구 (상단 중앙~우측) -->
+      <g class="district" onclick="clickDistrict('buk')">
+        <polygon points="110,20 240,10 290,30 310,80 290,130 240,150 190,160 160,130 130,110 100,80 90,50" fill="#4a90d9" stroke="white" stroke-width="2.5"/>
+        <text x="200" y="90" text-anchor="middle" fill="white" font-size="15" font-weight="700">북구</text>
+        <text x="200" y="108" text-anchor="middle" fill="white" font-size="10" opacity="0.85">Buk-gu</text>
+      </g>
+
+      <!-- 광산구 (좌측) -->
+      <g class="district" onclick="clickDistrict('gwangsan')">
+        <polygon points="10,100 100,80 130,110 160,130 150,200 130,250 100,290 60,310 20,280 10,200" fill="#7bc67e" stroke="white" stroke-width="2.5"/>
+        <text x="80" y="205" text-anchor="middle" fill="white" font-size="15" font-weight="700">광산구</text>
+        <text x="80" y="223" text-anchor="middle" fill="white" font-size="10" opacity="0.85">Gwangsan-gu</text>
+      </g>
+
+      <!-- 서구 (중앙) -->
+      <g class="district" id="seogu-area" onclick="clickDistrict('seo')">
+        <polygon points="130,110 190,160 240,150 270,200 240,250 200,270 150,200 130,250 100,290 90,220 100,170 130,150" fill="#e8734a" stroke="white" stroke-width="2.5"/>
+        <text x="185" y="218" text-anchor="middle" fill="white" font-size="15" font-weight="700">서구</text>
+        <text x="185" y="236" text-anchor="middle" fill="white" font-size="10" opacity="0.85">Seo-gu ▶</text>
+      </g>
+
+      <!-- 동구 (우측) -->
+      <g class="district" onclick="clickDistrict('dong')">
+        <polygon points="240,150 290,130 340,150 370,200 350,260 310,280 270,260 240,250 270,200" fill="#9b59b6" stroke="white" stroke-width="2.5"/>
+        <text x="308" y="210" text-anchor="middle" fill="white" font-size="15" font-weight="700">동구</text>
+        <text x="308" y="228" text-anchor="middle" fill="white" font-size="10" opacity="0.85">Dong-gu</text>
+      </g>
+
+      <!-- 남구 (하단) -->
+      <g class="district" onclick="clickDistrict('nam')">
+        <polygon points="150,200 200,270 240,250 270,260 310,280 290,340 240,380 190,400 150,380 120,340 100,290 130,250" fill="#f0c040" stroke="white" stroke-width="2.5"/>
+        <text x="210" y="330" text-anchor="middle" fill="#1a1a2e" font-size="15" font-weight="700">남구</text>
+        <text x="210" y="348" text-anchor="middle" fill="#1a1a2e" font-size="10" opacity="0.8">Nam-gu</text>
+      </g>
+
+    </svg>
+  </div>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#4a90d9"></div>북구</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#7bc67e"></div>광산구</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#e8734a"></div>서구</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#9b59b6"></div>동구</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#f0c040"></div>남구</div>
+  </div>
+</div>
+
+<!-- ===== 화면 2: 서구 상세 지도 ===== -->
+<div class="screen" id="screen-seo">
+  <button class="back-btn" onclick="goBack()">← 광주광역시 전체</button>
+  <h1>서구 상세 지도</h1>
+  <p class="subtitle">마커를 클릭하면 사회문제 카드가 나옵니다</p>
+  <div class="map-container">
+    <svg viewBox="0 0 400 440" width="100%" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,0.15)"/>
+        </filter>
+      </defs>
+
+      <!-- 서구 배경 -->
+      <rect x="10" y="10" width="380" height="420" rx="12" fill="#eef2f7"/>
+
+      <!-- 동 영역들 -->
+      <!-- 유덕동 (북서) -->
+      <polygon points="30,30 130,30 130,120 80,140 30,120" fill="#fde8dc" stroke="#e8734a" stroke-width="1.5"/>
+      <text x="80" y="85" text-anchor="middle" fill="#c0582a" font-size="12" font-weight="600">유덕동</text>
+
+      <!-- 광천동 (북중) -->
+      <polygon points="130,30 230,30 230,110 180,130 130,120" fill="#fde8dc" stroke="#e8734a" stroke-width="1.5"/>
+      <text x="180" y="80" text-anchor="middle" fill="#c0582a" font-size="12" font-weight="600">광천동</text>
+
+      <!-- 양동 (북동) -->
+      <polygon points="230,30 370,30 370,110 280,130 230,110" fill="#fde8dc" stroke="#e8734a" stroke-width="1.5"/>
+      <text x="300" y="80" text-anchor="middle" fill="#c0582a" font-size="12" font-weight="600">양동</text>
+
+      <!-- 화정동 (중서) -->
+      <polygon points="30,120 130,120 180,130 180,230 100,240 30,210" fill="#fde8dc" stroke="#e8734a" stroke-width="1.5"/>
+      <text x="100" y="185" text-anchor="middle" fill="#c0582a" font-size="12" font-weight="600">화정동</text>
+
+      <!-- 상무동 (중앙) -->
+      <polygon points="130,120 230,110 280,130 280,220 230,240 180,230 180,130" fill="#fde8dc" stroke="#e8734a" stroke-width="1.5"/>
+      <text x="225" y="182" text-anchor="middle" fill="#c0582a" font-size="12" font-weight="600">상무동</text>
+
+      <!-- 치평동 (중동) -->
+      <polygon points="280,130 370,110 370,220 310,240 280,220" fill="#fde8dc" stroke="#e8734a" stroke-width="1.5"/>
+      <text x="325" y="178" text-anchor="middle" fill="#c0582a" font-size="12" font-weight="600">치평동</text>
+
+      <!-- 풍암동 (남중) -->
+      <polygon points="100,240 230,240 280,220 310,240 290,340 200,360 130,340 80,310" fill="#fde8dc" stroke="#e8734a" stroke-width="1.5"/>
+      <text x="205" y="300" text-anchor="middle" fill="#c0582a" font-size="12" font-weight="600">풍암동</text>
+
+      <!-- 서창동 (남하단) -->
+      <polygon points="80,310 130,340 200,360 290,340 280,420 160,420 80,400" fill="#fde8dc" stroke="#e8734a" stroke-width="1.5"/>
+      <text x="185" y="390" text-anchor="middle" fill="#c0582a" font-size="12" font-weight="600">서창동</text>
+
+      <!-- ===== 마커들 ===== -->
+
+      <!-- U-Square / 광천동 -->
+      <g class="marker" onclick="openCard('usquare')">
+        <circle cx="185" cy="70" r="14" fill="#e74c3c" filter="url(#shadow)"/>
+        <text x="185" y="75" text-anchor="middle" fill="white" font-size="13" font-weight="700">U</text>
+        <text x="185" y="52" text-anchor="middle" fill="#c0392b" font-size="9" font-weight="700">U-Square</text>
+      </g>
+
+      <!-- 양동시장 -->
+      <g class="marker" onclick="openCard('yangdong')">
+        <circle cx="300" cy="70" r="14" fill="#e67e22" filter="url(#shadow)"/>
+        <text x="300" y="75" text-anchor="middle" fill="white" font-size="11" font-weight="700">시장</text>
+        <text x="300" y="52" text-anchor="middle" fill="#d35400" font-size="9" font-weight="700">양동시장</text>
+      </g>
+
+      <!-- 상무지구 -->
+      <g class="marker" onclick="openCard('sangmu')">
+        <circle cx="225" cy="175" r="14" fill="#8e44ad" filter="url(#shadow)"/>
+        <text x="225" y="180" text-anchor="middle" fill="white" font-size="11" font-weight="700">상무</text>
+        <text x="225" y="157" text-anchor="middle" fill="#6c3483" font-size="9" font-weight="700">상무지구</text>
+      </g>
+
+      <!-- 풍암호수공원 -->
+      <g class="marker" onclick="openCard('pungam')">
+        <circle cx="200" cy="295" r="14" fill="#27ae60" filter="url(#shadow)"/>
+        <text x="200" y="300" text-anchor="middle" fill="white" font-size="11" font-weight="700">호수</text>
+        <text x="200" y="277" text-anchor="middle" fill="#1e8449" font-size="9" font-weight="700">풍암호수공원</text>
+      </g>
+
+      <!-- 서창동 통학로 -->
+      <g class="marker" onclick="openCard('seochang')">
+        <circle cx="180" cy="390" r="14" fill="#2980b9" filter="url(#shadow)"/>
+        <text x="180" y="395" text-anchor="middle" fill="white" font-size="11" font-weight="700">통학</text>
+        <text x="180" y="372" text-anchor="middle" fill="#1f618d" font-size="9" font-weight="700">서창 통학로</text>
+      </g>
+
+    </svg>
+  </div>
+
+  <div class="legend" style="margin-top:14px;">
+    <div class="legend-item"><div class="legend-dot" style="background:#e74c3c"></div>U-Square</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#e67e22"></div>양동시장</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#8e44ad"></div>상무지구</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#27ae60"></div>풍암호수공원</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#2980b9"></div>서창 통학로</div>
+  </div>
+</div>
+
+<!-- ===== 카드 오버레이 ===== -->
+<div class="overlay" id="overlay" onclick="closeCard(event)">
+  <div class="card" id="card" style="position:relative;">
+    <div class="card-handle"></div>
+    <button class="close-btn" onclick="closeCardBtn()">✕</button>
+    <span class="card-badge" id="card-badge">사회문제</span>
+    <h2 id="card-title"></h2>
+    <div class="card-section">
+      <div class="card-section-label">📍 관찰되는 사회문제</div>
+      <div class="card-section-content" id="card-issue"></div>
+    </div>
+    <hr class="card-divider">
+    <div class="card-section">
+      <div class="card-section-label">❗ 왜 중요한가</div>
+      <div class="card-section-content" id="card-why"></div>
+    </div>
+    <hr class="card-divider">
+    <div class="card-section">
+      <div class="card-section-label">💡 해결 아이디어</div>
+      <div class="card-section-content" id="card-solution"></div>
+    </div>
+    <hr class="card-divider">
+    <div class="card-section">
+      <div class="card-section-label">🎯 동아리 활동 연결</div>
+      <div class="card-section-content" id="card-activity"></div>
+      <div style="margin-top:8px"><span class="activity-tag" id="card-tag"></span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const cardData = {
+  usquare: {
+    badge: "교통·이동권",
+    title: "U-Square / 광천동 버스터미널 일대",
+    issue: "유스퀘어 주변은 시외버스, 도시철도, 시내버스가 교차하는 광주 최대 환승 거점이지만, 대형 쇼핑몰과 환승 동선이 충돌하며 노약자·장애인의 이동 동선이 복잡하고 위험합니다. 또한 심야 귀가 여성 1인의 안전 사각지대가 존재합니다.",
+    why: "하루 수만 명이 이용하는 핵심 이동 거점에서의 접근성 문제는 특정 계층의 도시 참여 기회 자체를 제한합니다. 이동권은 모든 사회 참여의 전제 조건입니다.",
+    solution: "① 환승 동선 시각화 안내판 개선 제안서 작성\n② 심야 귀가 안심 동행 캠페인 연계 기관 발굴\n③ 교통약자 동선 체험 보고서 제작",
+    activity: "이동권 실태조사 → 시민 제안 엽서 제작 → 구청 정책 제안",
+    tag: "이동권·안전"
+  },
+  yangdong: {
+    badge: "경제·재생",
+    title: "양동시장 일대",
+    issue: "전통시장 방문객 감소와 노령 상인 증가로 시장 내 공실률이 높아지고 있습니다. 청년 창업 진입 장벽과 접근성 문제(주차·동선)로 인해 지역 상권이 쇠퇴하고 있으며, 시장을 생활 터전으로 삼는 저소득 주민들의 경제적 기반이 흔들리고 있습니다.",
+    why: "양동시장은 단순 상업 시설이 아닌 인근 저소득 계층의 식생활·생계와 직결된 지역 생활 인프라입니다. 시장의 쇠퇴는 계층 불평등을 심화시킵니다.",
+    solution: "① 청년·어르신 협업 팝업 프로그램 기획 제안\n② 시장 SNS 홍보 콘텐츠 자원봉사 제작\n③ 시장 상권 현황 인터뷰 기록 프로젝트",
+    activity: "상인 인터뷰 → 카드뉴스 제작 → 시장 알리기 캠페인",
+    tag: "지역경제·상권"
+  },
+  sangmu: {
+    badge: "상업화·환경",
+    title: "상무지구 중심 상업지역",
+    issue: "상무지구는 대형 상업시설과 유흥업소가 밀집해 있어 주거지역과의 경계가 모호합니다. 야간 소음, 일회용 포장 쓰레기, 상업 간판 난립으로 인한 경관 훼손이 심각하며, 10대 청소년 심야 활동의 위험 노출 문제도 있습니다.",
+    why: "급격한 상업화는 지역 주민의 주거 환경과 삶의 질을 저하시키고, 특히 청소년·아동이 건강하게 성장할 수 있는 환경을 위협합니다.",
+    solution: "① 청소년 안전 취약 시간대·장소 매핑 활동\n② 쓰레기 배출 실태 모니터링 및 개선 캠페인\n③ '청소년이 머물 수 있는 상무지구' 공간 제안서",
+    activity: "환경 모니터링 → 데이터 시각화 → 구의회 청소년 정책 제안",
+    tag: "환경·청소년안전"
+  },
+  pungam: {
+    badge: "공원·환경",
+    title: "풍암호수공원",
+    issue: "풍암호수공원은 지역 주민 휴식 공간으로 인기가 높지만, 인근 아파트 단지 증가로 과밀 이용 문제가 발생하고 있습니다. 수질 관리 미흡, 외래 식물 침입, 밤낚시·쓰레기 투기로 인한 생태계 교란 문제가 지속되고 있습니다.",
+    why: "도시 녹지·수변 공간은 미세먼지 저감, 도시 열섬 완화, 주민 정신 건강에 직접적으로 기여합니다. 생태계 건강이 곧 주민의 생활 환경입니다.",
+    solution: "① 공원 생태 모니터링 시민 과학 프로젝트 참여\n② 외래종 식물 현황 조사 및 보고서 작성\n③ 공원 이용 에티켓 캠페인 콘텐츠 제작",
+    activity: "생태 조사 → 포스터·SNS 캠페인 → 시 환경부서 제안",
+    tag: "환경·생태"
+  },
+  seochang: {
+    badge: "통학안전",
+    title: "서창동 학생 통학로",
+    issue: "서창동 일대는 신규 아파트 단지 개발로 학생 수가 증가했으나, 통학로 인도 미확보 구간과 불법 주정차 차량으로 인해 보행 안전이 위협받고 있습니다. CCTV 음영 지역과 어두운 이면도로가 방과 후 안전 문제를 일으킵니다.",
+    why: "통학로 안전은 아동·청소년의 기본권입니다. 개발이 앞서고 생활 인프라가 뒤따르는 신규 택지의 전형적 문제로, 방치 시 사고로 이어집니다.",
+    solution: "① 통학로 위험 구간 직접 걸어보며 지도 제작\n② '우리 동네 통학로 지도' 제작 및 학교 배포\n③ 불법 주정차 신고 캠페인, 구청 민원 연계",
+    activity: "현장 답사 → 위험 지도 제작 → 학교·구청 공동 발표",
+    tag: "아동안전·통학"
+  }
+};
+
+function clickDistrict(name) {
+  if (name === 'seo') {
+    document.getElementById('screen-gwangju').classList.remove('active');
+    document.getElementById('screen-seo').classList.add('active');
+    window.scrollTo(0, 0);
+  } else {
+    const names = { buk:'북구', gwangsan:'광산구', dong:'동구', nam:'남구' };
+    alert(`${names[name]} 지도는 다음 버전에서 공개됩니다!`);
+  }
+}
+
+function goBack() {
+  document.getElementById('screen-seo').classList.remove('active');
+  document.getElementById('screen-gwangju').classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function openCard(key) {
+  const d = cardData[key];
+  document.getElementById('card-badge').textContent = d.badge;
+  document.getElementById('card-title').textContent = d.title;
+  document.getElementById('card-issue').innerHTML = d.issue.replace(/\n/g, '<br>');
+  document.getElementById('card-why').innerHTML = d.why.replace(/\n/g, '<br>');
+  document.getElementById('card-solution').innerHTML = d.solution.replace(/\n/g, '<br>');
+  document.getElementById('card-activity').innerHTML = d.activity.replace(/\n/g, '<br>');
+  document.getElementById('card-tag').textContent = d.tag;
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCard(e) {
+  if (e.target === document.getElementById('overlay')) {
+    closeCardBtn();
+  }
+}
+
+function closeCardBtn() {
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+</script>
+</body>
+</html>
