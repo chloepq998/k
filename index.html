@@ -18,19 +18,18 @@
   --text-dark:   #18202e;
   --text-mid:    #4a5568;
   --text-light:  #8a97aa;
-  --accent:      #2558d4;          /* 포인트 색 단 하나 */
+  --accent:      #2558d4;
   --accent-soft: #edf2ff;
   --border:      #dde3ee;
   --shadow-sm:   0 2px 6px rgba(0,0,0,0.06);
   --shadow-md:   0 4px 18px rgba(0,0,0,0.09);
   --r:           14px;
 
-  /* 광주 구별 색 (무채색 계열 + 서구만 accent) */
   --c-buk:      #8fa8c4;
   --c-gwangsan: #8ab5a0;
   --c-seo:      #2558d4;
   --c-dong:     #a090be;
-  --c-nam:      #b8a865;
+  --c-nam:      #b0984a;
 }
 
 body {
@@ -45,6 +44,17 @@ body {
 .screen { display: none; flex-direction: column; align-items: center; min-height: 100vh; padding: 24px 16px 56px; }
 .screen.active { display: flex; }
 
+/* ── 접근성: 키보드 포커스 ── */
+:focus { outline: none; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+
+.district:focus-visible polygon { filter: brightness(.82); }
+.marker:focus-visible circle    { stroke: white; stroke-width: 3; }
+.loc-item:focus-visible         { border-color: var(--accent); background: var(--accent-soft); }
+.loc-item:focus-visible .loc-num { background: var(--accent); color: white; border-color: var(--accent); }
+.back-btn:focus-visible         { outline: 2px solid var(--accent); outline-offset: 2px; }
+.close-btn:focus-visible        { outline: 2px solid var(--accent); outline-offset: 2px; }
+
 /* ── 브레드크럼 ── */
 .breadcrumb {
   align-self: flex-start;
@@ -57,7 +67,7 @@ body {
 .breadcrumb .cur { color: var(--accent); font-weight: 700; }
 
 /* ── 메인 타이틀 ── */
-.hero { text-align: center; max-width: 520px; width: 100%; margin-bottom: 26px; }
+.hero { text-align: center; max-width: 520px; width: 100%; margin-bottom: 24px; }
 .hero h1 {
   font-size: 26px; font-weight: 900; letter-spacing: -1px;
   color: var(--text-dark); line-height: 1.2; margin-bottom: 12px;
@@ -71,10 +81,7 @@ body {
 }
 
 /* ── 인트로 카드 3개 ── */
-.intro-row {
-  display: flex; gap: 10px; width: 100%; max-width: 520px;
-  margin-bottom: 20px;
-}
+.intro-row { display: flex; gap: 10px; width: 100%; max-width: 520px; margin-bottom: 20px; }
 .intro-card {
   flex: 1; background: var(--white);
   border: 1px solid var(--border); border-radius: var(--r);
@@ -97,7 +104,10 @@ svg text { pointer-events: none; user-select: none; }
 .district { cursor: pointer; }
 .district polygon { transition: filter .18s; }
 .district:hover polygon  { filter: brightness(.88); }
-.district:active polygon { filter: brightness(.75); }
+.district:active polygon { filter: brightness(.74); }
+
+/* 서구 강조 */
+#seo-district polygon { stroke-width: 3 !important; }
 
 /* ── 사용 안내 ── */
 .guide {
@@ -107,13 +117,16 @@ svg text { pointer-events: none; user-select: none; }
 }
 .guide-title { font-size: 11px; font-weight: 800; color: var(--accent); margin-bottom: 7px; }
 .guide ol { padding-left: 16px; }
-.guide li  { font-size: 12px; color: var(--text-mid); line-height: 1.8; }
+.guide li  { font-size: 12px; color: var(--text-mid); line-height: 1.9; }
+
+/* ── 프로토타입 안내 문구 ── */
+.disclaimer {
+  font-size: 11px; color: var(--text-light); text-align: center;
+  max-width: 440px; line-height: 1.6; margin-top: 18px; padding: 0 4px;
+}
 
 /* ── 범례 ── */
-.legend {
-  display: flex; flex-wrap: wrap; gap: 8px 16px;
-  justify-content: center; margin-top: 12px;
-}
+.legend { display: flex; flex-wrap: wrap; gap: 8px 16px; justify-content: center; margin-top: 12px; }
 .legend-item { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--text-mid); }
 .legend-dot  { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
 
@@ -124,20 +137,20 @@ svg text { pointer-events: none; user-select: none; }
   background: var(--white); border: 1px solid var(--border);
   color: var(--text-mid); font-size: 13px; font-weight: 600;
   padding: 8px 16px; border-radius: 10px; cursor: pointer;
-  box-shadow: var(--shadow-sm); transition: color .15s, background .15s;
+  box-shadow: var(--shadow-sm); transition: color .15s, background .15s, border-color .15s;
   margin-bottom: 16px;
 }
-.back-btn:hover { color: var(--accent); background: var(--bg); }
+.back-btn:hover { color: var(--accent); background: var(--accent-soft); border-color: var(--accent); }
 
 /* ── 서구 화면 제목 ── */
 .sec-header { text-align: center; max-width: 520px; width: 100%; margin-bottom: 20px; }
 .sec-header h1 { font-size: 20px; font-weight: 800; letter-spacing: -.5px; margin-bottom: 6px; }
 .sec-header p  { font-size: 13px; color: var(--text-mid); line-height: 1.6; }
 
-/* ── 마커 SVG ── */
+/* ── 마커 ── */
 .marker { cursor: pointer; transition: transform .15s; transform-box: fill-box; transform-origin: center; }
-.marker:hover { transform: scale(1.15); }
-.marker.marker-active { transform: scale(1.2); }
+.marker:hover         { transform: scale(1.15); }
+.marker.marker-active { transform: scale(1.22); }
 .marker.marker-active circle { stroke: white; stroke-width: 3; }
 
 /* ── 장소 목록 ── */
@@ -148,7 +161,7 @@ svg text { pointer-events: none; user-select: none; }
   border-radius: 12px; padding: 12px 14px; cursor: pointer;
   box-shadow: var(--shadow-sm); transition: border-color .15s, background .15s;
 }
-.loc-item:hover { border-color: var(--accent); background: var(--accent-soft); }
+.loc-item:hover     { border-color: var(--accent); background: var(--accent-soft); }
 .loc-item.list-active { border-color: var(--accent); background: var(--accent-soft); }
 .loc-num {
   width: 28px; height: 28px; border-radius: 50%;
@@ -158,18 +171,16 @@ svg text { pointer-events: none; user-select: none; }
   transition: background .15s, color .15s, border-color .15s;
 }
 .loc-item.list-active .loc-num,
-.loc-item:hover .loc-num {
-  background: var(--accent); color: white; border-color: var(--accent);
-}
-.loc-text { flex: 1; }
+.loc-item:hover .loc-num { background: var(--accent); color: white; border-color: var(--accent); }
+.loc-text { flex: 1; min-width: 0; }
 .loc-name { font-size: 14px; font-weight: 700; color: var(--text-dark); }
 .loc-tag  { font-size: 11px; color: var(--text-light); margin-top: 2px; }
-.loc-chevron { font-size: 16px; color: var(--text-light); }
+.loc-chevron { font-size: 16px; color: var(--border); flex-shrink: 0; }
 
 /* ── 카드 오버레이 ── */
 .overlay {
   display: none; position: fixed; inset: 0;
-  background: rgba(10,18,36,.45); z-index: 200;
+  background: rgba(10,18,36,.48); z-index: 200;
   align-items: flex-end; justify-content: center;
 }
 .overlay.open { display: flex; }
@@ -182,18 +193,17 @@ svg text { pointer-events: none; user-select: none; }
 }
 @keyframes up { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-.card-handle {
-  width: 34px; height: 4px; background: #dde3ee;
-  border-radius: 2px; margin: 0 auto 18px;
-}
+.card-handle { width: 34px; height: 4px; background: #dde3ee; border-radius: 2px; margin: 0 auto 18px; }
+
 .close-btn {
-  position: absolute; top: 16px; right: 16px;
-  background: var(--bg); border: none; border-radius: 50%;
-  width: 30px; height: 30px; font-size: 14px; cursor: pointer;
+  position: absolute; top: 14px; right: 14px;
+  background: var(--border); border: none; border-radius: 50%;
+  width: 36px; height: 36px; font-size: 15px; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  color: var(--text-mid); transition: background .15s;
+  color: var(--text-mid); transition: background .15s, color .15s;
+  font-weight: 700;
 }
-.close-btn:hover { background: var(--border); }
+.close-btn:hover { background: #c8ccda; color: var(--text-dark); }
 
 .card-badge {
   display: inline-block; font-size: 10px; font-weight: 800;
@@ -203,22 +213,23 @@ svg text { pointer-events: none; user-select: none; }
 .card h2 {
   font-size: 17px; font-weight: 800; line-height: 1.35;
   color: var(--text-dark); margin-bottom: 18px;
+  padding-right: 40px;
 }
 
 .c-row { margin-bottom: 12px; }
 .c-label {
   font-size: 10px; font-weight: 700; letter-spacing: .8px;
-  color: var(--text-light); text-transform: uppercase; margin-bottom: 3px;
+  color: var(--text-light); text-transform: uppercase; margin-bottom: 4px;
 }
-.c-val { font-size: 13px; color: var(--text-mid); line-height: 1.65; }
+.c-val { font-size: 13px; color: var(--text-mid); line-height: 1.7; }
 
 hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
 
 .record-note {
   margin-top: 16px; padding: 12px 14px;
-  background: #f8f9fb; border-left: 3px solid var(--accent);
+  background: var(--bg); border-left: 3px solid var(--accent);
   border-radius: 0 8px 8px 0;
-  font-size: 12px; color: var(--text-mid); line-height: 1.6;
+  font-size: 12px; color: var(--text-mid); line-height: 1.65;
 }
 
 /* ── 반응형 ── */
@@ -230,6 +241,7 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
 @media (max-width: 360px) {
   .intro-card p { display: none; }
   .intro-card h3 { font-size: 12px; }
+  .hero h1 { font-size: 22px; }
 }
 </style>
 </head>
@@ -240,7 +252,9 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
 ========================================================= -->
 <div class="screen active" id="screen-gwangju">
 
-  <div class="breadcrumb"><span class="cur">광주 전체 보기</span></div>
+  <div class="breadcrumb">
+    <span class="cur">광주 전체 보기</span>
+  </div>
 
   <div class="hero">
     <h1>도시는 누구에게<br><em>편리한가?</em></h1>
@@ -270,43 +284,65 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
   <!-- 광주 지도 -->
   <div class="map-card">
     <svg viewBox="0 0 400 400" width="100%" xmlns="http://www.w3.org/2000/svg">
-      <g class="district" onclick="clickDistrict('buk')">
+
+      <!-- 북구 -->
+      <g class="district" tabindex="0" role="button" aria-label="북구"
+         onclick="clickDistrict('buk')"
+         onkeydown="handleKey(event,'buk')">
         <polygon points="108,18 244,10 292,32 308,82 288,132 238,152 188,162 158,130 128,108 98,78 88,48"
                  fill="var(--c-buk)" stroke="white" stroke-width="2.5" stroke-linejoin="round"/>
-        <text x="196" y="88" text-anchor="middle" fill="white" font-size="14" font-weight="700">북구</text>
-        <text x="196" y="104" text-anchor="middle" fill="white" font-size="10" opacity=".75">Buk-gu</text>
+        <text x="196" y="88"  text-anchor="middle" fill="white" font-size="14" font-weight="700">북구</text>
+        <text x="196" y="104" text-anchor="middle" fill="white" font-size="10" opacity=".7">Buk-gu</text>
       </g>
-      <g class="district" onclick="clickDistrict('gwangsan')">
+
+      <!-- 광산구 -->
+      <g class="district" tabindex="0" role="button" aria-label="광산구"
+         onclick="clickDistrict('gwangsan')"
+         onkeydown="handleKey(event,'gwangsan')">
         <polygon points="10,98 98,78 128,108 158,130 148,198 128,248 98,288 58,308 18,278 10,198"
                  fill="var(--c-gwangsan)" stroke="white" stroke-width="2.5" stroke-linejoin="round"/>
         <text x="78" y="198" text-anchor="middle" fill="white" font-size="14" font-weight="700">광산구</text>
-        <text x="78" y="214" text-anchor="middle" fill="white" font-size="10" opacity=".75">Gwangsan-gu</text>
+        <text x="78" y="214" text-anchor="middle" fill="white" font-size="10" opacity=".7">Gwangsan-gu</text>
       </g>
-      <g class="district" onclick="clickDistrict('seo')">
+
+      <!-- 서구 (강조) -->
+      <g class="district" id="seo-district" tabindex="0" role="button"
+         aria-label="서구 — 클릭하면 상세 지도로 이동합니다"
+         onclick="clickDistrict('seo')"
+         onkeydown="handleKey(event,'seo')">
         <polygon points="128,108 188,162 238,152 268,198 238,248 198,268 148,198 128,248 98,288 88,218 98,168 128,148"
-                 fill="var(--c-seo)" stroke="white" stroke-width="2.5" stroke-linejoin="round"/>
-        <text x="183" y="210" text-anchor="middle" fill="white" font-size="14" font-weight="700">서구</text>
-        <text x="183" y="228" text-anchor="middle" fill="white" font-size="10" opacity=".9">클릭 ▶</text>
+                 fill="var(--c-seo)" stroke="rgba(255,255,255,0.9)" stroke-width="3" stroke-linejoin="round"/>
+        <text x="183" y="208" text-anchor="middle" fill="white" font-size="14" font-weight="700">서구</text>
+        <text x="183" y="226" text-anchor="middle" fill="white" font-size="11" font-weight="600" opacity=".95">클릭 ▶</text>
       </g>
-      <g class="district" onclick="clickDistrict('dong')">
+
+      <!-- 동구 -->
+      <g class="district" tabindex="0" role="button" aria-label="동구"
+         onclick="clickDistrict('dong')"
+         onkeydown="handleKey(event,'dong')">
         <polygon points="238,152 288,132 342,150 368,198 348,258 308,278 268,258 238,248 268,198"
                  fill="var(--c-dong)" stroke="white" stroke-width="2.5" stroke-linejoin="round"/>
         <text x="306" y="206" text-anchor="middle" fill="white" font-size="14" font-weight="700">동구</text>
-        <text x="306" y="222" text-anchor="middle" fill="white" font-size="10" opacity=".75">Dong-gu</text>
+        <text x="306" y="222" text-anchor="middle" fill="white" font-size="10" opacity=".7">Dong-gu</text>
       </g>
-      <g class="district" onclick="clickDistrict('nam')">
+
+      <!-- 남구 -->
+      <g class="district" tabindex="0" role="button" aria-label="남구"
+         onclick="clickDistrict('nam')"
+         onkeydown="handleKey(event,'nam')">
         <polygon points="148,198 198,268 238,248 268,258 308,278 288,338 238,378 188,398 148,378 118,338 98,288 128,248"
                  fill="var(--c-nam)" stroke="white" stroke-width="2.5" stroke-linejoin="round"/>
         <text x="208" y="322" text-anchor="middle" fill="white" font-size="14" font-weight="700">남구</text>
-        <text x="208" y="338" text-anchor="middle" fill="white" font-size="10" opacity=".75">Nam-gu</text>
+        <text x="208" y="338" text-anchor="middle" fill="white" font-size="10" opacity=".7">Nam-gu</text>
       </g>
+
     </svg>
   </div>
 
   <div class="legend">
     <div class="legend-item"><div class="legend-dot" style="background:var(--c-buk)"></div>북구</div>
     <div class="legend-item"><div class="legend-dot" style="background:var(--c-gwangsan)"></div>광산구</div>
-    <div class="legend-item"><div class="legend-dot" style="background:var(--c-seo)"></div>서구 (상세 지도 제공)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--c-seo)"></div>서구 ★ 상세 지도 제공</div>
     <div class="legend-item"><div class="legend-dot" style="background:var(--c-dong)"></div>동구</div>
     <div class="legend-item"><div class="legend-dot" style="background:var(--c-nam)"></div>남구</div>
   </div>
@@ -314,11 +350,15 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
   <div class="guide">
     <div class="guide-title">사용 방법</div>
     <ol>
-      <li>지도에서 <strong>서구</strong>를 클릭하면 상세 화면으로 이동합니다.</li>
-      <li>지도 속 번호 마커 또는 아래 목록을 클릭하세요.</li>
-      <li>각 장소의 문제, 원인, 해결 방법을 카드로 확인할 수 있습니다.</li>
+      <li>지도에서 <strong>서구</strong>를 클릭하면 상세 지도 화면으로 이동합니다.</li>
+      <li>서구 지도에서 번호 마커 또는 아래 장소 목록을 클릭하세요.</li>
+      <li>각 장소의 문제, 원인, 해결 방법이 담긴 카드가 열립니다.</li>
     </ol>
   </div>
+
+  <p class="disclaimer">
+    이 지도는 정확한 행정구역 경계보다 지역문제를 이해하기 위한 시각화에 초점을 둔 프로토타입입니다.
+  </p>
 
 </div><!-- /screen-gwangju -->
 
@@ -334,7 +374,9 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
     <span class="cur">서구 상세 보기</span>
   </div>
 
-  <button class="back-btn" onclick="goBack()">← 광주 전체 지도</button>
+  <button class="back-btn" onclick="goBack()" aria-label="광주 전체 지도로 돌아가기">
+    ← 광주 전체 지도
+  </button>
 
   <div class="sec-header">
     <h1>서구 지역문제 상세 지도</h1>
@@ -348,68 +390,94 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
         <filter id="mshadow" x="-30%" y="-30%" width="160%" height="160%">
           <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,.16)"/>
         </filter>
+        <filter id="mshadow-active" x="-30%" y="-30%" width="160%" height="160%">
+          <feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="rgba(37,88,212,.35)"/>
+        </filter>
       </defs>
 
-      <!-- 배경 -->
+      <!-- 지도 배경 -->
       <rect x="6" y="6" width="388" height="448" rx="12" fill="#f0f2f7"/>
 
       <!-- 동 영역 -->
-      <polygon points="20,20 126,20 126,118 74,136 20,116"         fill="#e8eaf2" stroke="#c8ccde" stroke-width="1.5" stroke-linejoin="round"/>
+      <polygon points="20,20 126,20 126,118 74,136 20,116"
+               fill="#e8eaf2" stroke="#c8ccde" stroke-width="1.5" stroke-linejoin="round"/>
       <text x="73"  y="76"  text-anchor="middle" fill="#4a5068" font-size="11" font-weight="600">유덕동</text>
 
-      <polygon points="126,20 230,20 230,108 176,124 126,118"      fill="#e8eaf2" stroke="#c8ccde" stroke-width="1.5" stroke-linejoin="round"/>
+      <polygon points="126,20 230,20 230,108 176,124 126,118"
+               fill="#e8eaf2" stroke="#c8ccde" stroke-width="1.5" stroke-linejoin="round"/>
       <text x="178" y="70"  text-anchor="middle" fill="#4a5068" font-size="11" font-weight="600">광천동</text>
 
-      <polygon points="230,20 380,20 380,108 282,128 230,108"      fill="#e8eaf2" stroke="#c8ccde" stroke-width="1.5" stroke-linejoin="round"/>
+      <polygon points="230,20 380,20 380,108 282,128 230,108"
+               fill="#e8eaf2" stroke="#c8ccde" stroke-width="1.5" stroke-linejoin="round"/>
       <text x="305" y="70"  text-anchor="middle" fill="#4a5068" font-size="11" font-weight="600">양동</text>
 
-      <polygon points="20,116 126,118 176,124 176,230 94,242 20,210" fill="#e8eaf2" stroke="#c8ccde" stroke-width="1.5" stroke-linejoin="round"/>
+      <polygon points="20,116 126,118 176,124 176,230 94,242 20,210"
+               fill="#e8eaf2" stroke="#c8ccde" stroke-width="1.5" stroke-linejoin="round"/>
       <text x="93"  y="182" text-anchor="middle" fill="#4a5068" font-size="11" font-weight="600">화정동</text>
 
-      <polygon points="126,118 230,108 282,128 282,222 230,242 176,230 176,124" fill="#e8eaf2" stroke="#c8ccde" stroke-width="1.5" stroke-linejoin="round"/>
+      <polygon points="126,118 230,108 282,128 282,222 230,242 176,230 176,124"
+               fill="#e8eaf2" stroke="#c8ccde" stroke-width="1.5" stroke-linejoin="round"/>
       <text x="224" y="178" text-anchor="middle" fill="#4a5068" font-size="11" font-weight="600">상무동</text>
 
-      <polygon points="282,128 380,108 380,222 314,242 282,222"    fill="#e8eaf2" stroke="#c8ccde" stroke-width="1.5" stroke-linejoin="round"/>
+      <polygon points="282,128 380,108 380,222 314,242 282,222"
+               fill="#e8eaf2" stroke="#c8ccde" stroke-width="1.5" stroke-linejoin="round"/>
       <text x="330" y="176" text-anchor="middle" fill="#4a5068" font-size="11" font-weight="600">치평동</text>
 
-      <polygon points="94,242 230,242 282,222 314,242 292,338 202,356 126,336 78,308" fill="#e8eaf2" stroke="#c8ccde" stroke-width="1.5" stroke-linejoin="round"/>
+      <polygon points="94,242 230,242 282,222 314,242 292,338 202,356 126,336 78,308"
+               fill="#e8eaf2" stroke="#c8ccde" stroke-width="1.5" stroke-linejoin="round"/>
       <text x="206" y="298" text-anchor="middle" fill="#4a5068" font-size="11" font-weight="600">풍암동</text>
 
-      <polygon points="78,308 126,336 202,356 292,338 282,444 158,444 74,418" fill="#e8eaf2" stroke="#c8ccde" stroke-width="1.5" stroke-linejoin="round"/>
+      <polygon points="78,308 126,336 202,356 292,338 282,444 158,444 74,418"
+               fill="#e8eaf2" stroke="#c8ccde" stroke-width="1.5" stroke-linejoin="round"/>
       <text x="186" y="400" text-anchor="middle" fill="#4a5068" font-size="11" font-weight="600">서창동</text>
 
       <!-- 마커 1: U-Square -->
-      <g class="marker" id="marker-usquare" onclick="openCard('usquare')">
-        <circle cx="182" cy="66" r="14" fill="#2558d4" filter="url(#mshadow)"/>
-        <text x="182" y="71" text-anchor="middle" fill="white" font-size="12" font-weight="800">1</text>
+      <g class="marker" id="marker-usquare" tabindex="0" role="button"
+         aria-label="1번 마커: U-Square / 광천동"
+         onclick="openCard('usquare')"
+         onkeydown="handleMarkerKey(event,'usquare')">
+        <circle cx="182" cy="66" r="15" fill="#2558d4" filter="url(#mshadow)"/>
+        <text x="182" y="72" text-anchor="middle" fill="white" font-size="13" font-weight="800">1</text>
         <text x="182" y="50" text-anchor="middle" fill="#1a3a8c" font-size="9" font-weight="700">U-Square</text>
       </g>
 
       <!-- 마커 2: 양동시장 -->
-      <g class="marker" id="marker-yangdong" onclick="openCard('yangdong')">
-        <circle cx="310" cy="66" r="14" fill="#2558d4" filter="url(#mshadow)"/>
-        <text x="310" y="71" text-anchor="middle" fill="white" font-size="12" font-weight="800">2</text>
+      <g class="marker" id="marker-yangdong" tabindex="0" role="button"
+         aria-label="2번 마커: 양동시장"
+         onclick="openCard('yangdong')"
+         onkeydown="handleMarkerKey(event,'yangdong')">
+        <circle cx="310" cy="66" r="15" fill="#2558d4" filter="url(#mshadow)"/>
+        <text x="310" y="72" text-anchor="middle" fill="white" font-size="13" font-weight="800">2</text>
         <text x="310" y="50" text-anchor="middle" fill="#1a3a8c" font-size="9" font-weight="700">양동시장</text>
       </g>
 
       <!-- 마커 3: 상무지구 -->
-      <g class="marker" id="marker-sangmu" onclick="openCard('sangmu')">
-        <circle cx="228" cy="174" r="14" fill="#2558d4" filter="url(#mshadow)"/>
-        <text x="228" y="179" text-anchor="middle" fill="white" font-size="12" font-weight="800">3</text>
-        <text x="228" y="158" text-anchor="middle" fill="#1a3a8c" font-size="9" font-weight="700">상무지구</text>
+      <g class="marker" id="marker-sangmu" tabindex="0" role="button"
+         aria-label="3번 마커: 상무지구"
+         onclick="openCard('sangmu')"
+         onkeydown="handleMarkerKey(event,'sangmu')">
+        <circle cx="228" cy="174" r="15" fill="#2558d4" filter="url(#mshadow)"/>
+        <text x="228" y="180" text-anchor="middle" fill="white" font-size="13" font-weight="800">3</text>
+        <text x="228" y="156" text-anchor="middle" fill="#1a3a8c" font-size="9" font-weight="700">상무지구</text>
       </g>
 
       <!-- 마커 4: 풍암호수공원 -->
-      <g class="marker" id="marker-pungam" onclick="openCard('pungam')">
-        <circle cx="202" cy="296" r="14" fill="#2558d4" filter="url(#mshadow)"/>
-        <text x="202" y="301" text-anchor="middle" fill="white" font-size="12" font-weight="800">4</text>
-        <text x="202" y="280" text-anchor="middle" fill="#1a3a8c" font-size="9" font-weight="700">풍암호수공원</text>
+      <g class="marker" id="marker-pungam" tabindex="0" role="button"
+         aria-label="4번 마커: 풍암호수공원"
+         onclick="openCard('pungam')"
+         onkeydown="handleMarkerKey(event,'pungam')">
+        <circle cx="202" cy="296" r="15" fill="#2558d4" filter="url(#mshadow)"/>
+        <text x="202" y="302" text-anchor="middle" fill="white" font-size="13" font-weight="800">4</text>
+        <text x="202" y="278" text-anchor="middle" fill="#1a3a8c" font-size="9" font-weight="700">풍암호수공원</text>
       </g>
 
       <!-- 마커 5: 서창동 통학로 -->
-      <g class="marker" id="marker-seochang" onclick="openCard('seochang')">
-        <circle cx="182" cy="400" r="14" fill="#2558d4" filter="url(#mshadow)"/>
-        <text x="182" y="405" text-anchor="middle" fill="white" font-size="12" font-weight="800">5</text>
+      <g class="marker" id="marker-seochang" tabindex="0" role="button"
+         aria-label="5번 마커: 서창동 통학로"
+         onclick="openCard('seochang')"
+         onkeydown="handleMarkerKey(event,'seochang')">
+        <circle cx="182" cy="402" r="15" fill="#2558d4" filter="url(#mshadow)"/>
+        <text x="182" y="408" text-anchor="middle" fill="white" font-size="13" font-weight="800">5</text>
         <text x="182" y="384" text-anchor="middle" fill="#1a3a8c" font-size="9" font-weight="700">서창 통학로</text>
       </g>
 
@@ -417,47 +485,68 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
   </div>
 
   <!-- 장소 목록 -->
-  <div class="loc-list">
-    <div class="loc-item" id="list-usquare"  onclick="openCard('usquare')">
-      <span class="loc-num">1</span>
+  <div class="loc-list" role="list">
+
+    <div class="loc-item" id="list-usquare" tabindex="0" role="listitem button"
+         aria-label="1번 장소: U-Square / 광천동 카드 열기"
+         onclick="openCard('usquare')"
+         onkeydown="handleMarkerKey(event,'usquare')">
+      <span class="loc-num" aria-hidden="true">1</span>
       <div class="loc-text">
         <div class="loc-name">U-Square / 광천동</div>
         <div class="loc-tag">교통·보행안전</div>
       </div>
-      <span class="loc-chevron">›</span>
+      <span class="loc-chevron" aria-hidden="true">›</span>
     </div>
-    <div class="loc-item" id="list-yangdong" onclick="openCard('yangdong')">
-      <span class="loc-num">2</span>
+
+    <div class="loc-item" id="list-yangdong" tabindex="0" role="listitem button"
+         aria-label="2번 장소: 양동시장 / 양동 카드 열기"
+         onclick="openCard('yangdong')"
+         onkeydown="handleMarkerKey(event,'yangdong')">
+      <span class="loc-num" aria-hidden="true">2</span>
       <div class="loc-text">
         <div class="loc-name">양동시장 / 양동</div>
         <div class="loc-tag">지역경제·재생</div>
       </div>
-      <span class="loc-chevron">›</span>
+      <span class="loc-chevron" aria-hidden="true">›</span>
     </div>
-    <div class="loc-item" id="list-sangmu"   onclick="openCard('sangmu')">
-      <span class="loc-num">3</span>
+
+    <div class="loc-item" id="list-sangmu" tabindex="0" role="listitem button"
+         aria-label="3번 장소: 상무지구 카드 열기"
+         onclick="openCard('sangmu')"
+         onkeydown="handleMarkerKey(event,'sangmu')">
+      <span class="loc-num" aria-hidden="true">3</span>
       <div class="loc-text">
         <div class="loc-name">상무지구 / 상무동·치평동</div>
         <div class="loc-tag">젠트리피케이션</div>
       </div>
-      <span class="loc-chevron">›</span>
+      <span class="loc-chevron" aria-hidden="true">›</span>
     </div>
-    <div class="loc-item" id="list-pungam"   onclick="openCard('pungam')">
-      <span class="loc-num">4</span>
+
+    <div class="loc-item" id="list-pungam" tabindex="0" role="listitem button"
+         aria-label="4번 장소: 풍암호수공원 카드 열기"
+         onclick="openCard('pungam')"
+         onkeydown="handleMarkerKey(event,'pungam')">
+      <span class="loc-num" aria-hidden="true">4</span>
       <div class="loc-text">
         <div class="loc-name">풍암호수공원 / 풍암동</div>
         <div class="loc-tag">환경·생태관리</div>
       </div>
-      <span class="loc-chevron">›</span>
+      <span class="loc-chevron" aria-hidden="true">›</span>
     </div>
-    <div class="loc-item" id="list-seochang" onclick="openCard('seochang')">
-      <span class="loc-num">5</span>
+
+    <div class="loc-item" id="list-seochang" tabindex="0" role="listitem button"
+         aria-label="5번 장소: 서창동 통학로 카드 열기"
+         onclick="openCard('seochang')"
+         onkeydown="handleMarkerKey(event,'seochang')">
+      <span class="loc-num" aria-hidden="true">5</span>
       <div class="loc-text">
         <div class="loc-name">서창동 통학로 / 서창동</div>
         <div class="loc-tag">아동·보행안전</div>
       </div>
-      <span class="loc-chevron">›</span>
+      <span class="loc-chevron" aria-hidden="true">›</span>
     </div>
+
   </div>
 
 </div><!-- /screen-seo -->
@@ -466,10 +555,10 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
 <!-- =========================================================
   카드 오버레이
 ========================================================= -->
-<div class="overlay" id="overlay" onclick="overlayClick(event)">
+<div class="overlay" id="overlay" onclick="overlayClick(event)" role="dialog" aria-modal="true" aria-labelledby="c-title">
   <div class="card" id="card">
-    <div class="card-handle"></div>
-    <button class="close-btn" onclick="closeCard()">✕</button>
+    <div class="card-handle" aria-hidden="true"></div>
+    <button class="close-btn" onclick="closeCard()" aria-label="카드 닫기">✕</button>
 
     <span class="card-badge" id="c-badge"></span>
     <h2 id="c-title"></h2>
@@ -515,17 +604,17 @@ const CARDS = {
   usquare: {
     badge: "교통·보행안전",
     title: "U-Square / 광천동 버스터미널",
-    issue: "수만 명이 오가는 환승 거점이지만, 쇼핑몰 동선과 버스 동선이 뒤섞여 보행자가 차도 옆을 위험하게 걷는 상황이 반복됩니다.",
-    cause: "상업 시설 확장을 중심으로 공간이 설계되어, 보행자·교통약자 동선은 후순위로 밀렸습니다.",
+    issue: "수만 명이 오가는 환승 거점이지만, 쇼핑몰 동선과 버스 동선이 뒤섞여 있어 보행자가 차도 옆을 걸어야 하는 상황이 반복됩니다.",
+    cause: "상업 시설 확장을 중심으로 공간이 설계되면서, 보행자·교통약자 동선이 후순위로 밀렸습니다.",
     who: "대중교통 이용자, 휠체어 사용자, 심야 귀가 여성, 어르신",
-    solution: "교통약자 우선 동선 안내 개선, 심야 안심 귀가 서비스 연계, 보행자 횡단 환경 개선 요청.",
+    solution: "교통약자 우선 동선 안내 개선, 보행자 횡단 환경 재설계, 심야 안전 귀가 서비스 연계.",
     activity: "혼잡 시간대 보행 동선 사진 기록 → 위험 구간 지도 제작 → 구청 제안서 작성"
   },
   yangdong: {
     badge: "지역경제·재생",
     title: "양동시장 / 양동",
-    issue: "점포 공실이 늘고 상인 평균 연령이 높아졌습니다. 오래된 시장이 '낡은 공간'이 아니라 지역 기억과 생계의 공간임이 외면받고 있습니다.",
-    cause: "대형마트·온라인 쇼핑에 방문객이 분산되고, 청년 창업 진입 장벽도 높아 세대 교체가 이루어지지 않습니다.",
+    issue: "점포 공실이 늘고 상인 평균 연령이 높아졌습니다. 오래된 시장은 낡은 공간이 아니라 지역 기억과 생계가 담긴 공간인데, 그 가치가 점점 외면받고 있습니다.",
+    cause: "대형마트·온라인 쇼핑으로 방문객이 줄었고, 청년 창업 진입 장벽이 높아 세대 교체도 어렵습니다.",
     who: "시장을 생계 터전으로 삼는 고령 상인, 저렴한 식재료에 의존하는 저소득 주민",
     solution: "지역 SNS 홍보 자원봉사, 청년 팝업 공간 연계 제안, 시장 문화 행사 기획.",
     activity: "상인 구술 인터뷰 기록 → 공실 현황 사진 → 시장 알리기 카드뉴스 제작"
@@ -533,8 +622,8 @@ const CARDS = {
   sangmu: {
     badge: "젠트리피케이션",
     title: "상무지구 / 상무동·치평동",
-    issue: "대형 상업시설이 늘면서 소규모 가게와 주거 공간이 빠르게 밀려나고 있습니다. 화려한 상권 뒤에서 생활 공간이 사라집니다.",
-    cause: "임대료 상승과 상업화 압력으로, 오래된 소상공인과 주민이 감당할 수 없는 환경이 만들어졌습니다.",
+    issue: "대형 상업시설이 들어서면서 소규모 가게와 오랜 주거 공간이 밀려나고 있습니다. 화려한 상권 뒤에서 생활 공간이 사라지는 구조입니다.",
+    cause: "임대료 상승과 상업화 압력으로, 소상공인과 기존 주민이 감당하기 어려운 환경이 만들어졌습니다.",
     who: "오랫동안 자리를 지켜온 소상공인, 인근 주거 지역 주민, 야간 안전이 필요한 청소년",
     solution: "상권 변화 모니터링 기록, 소상공인 지원 정책 제안, 청소년 안전 취약 구간 조사.",
     activity: "상가 변화 전후 사진 기록 → 빈 점포 위치 지도 제작 → 지역 변화 아카이브"
@@ -542,17 +631,17 @@ const CARDS = {
   pungam: {
     badge: "환경·생태관리",
     title: "풍암호수공원 / 풍암동",
-    issue: "수질 오염과 쓰레기 투기가 반복되고, 과밀 이용으로 공원 생태가 훼손됩니다. 시민 휴식 공간이 관리 실패로 불쾌하고 위험한 장소가 되어가고 있습니다.",
-    cause: "주변 아파트 개발로 이용자가 급증했지만, 환경 관리 인력과 시설이 수요를 따라가지 못합니다.",
-    who: "공원을 일상 휴식 공간으로 이용하는 주민, 어린이·노인, 공원 생태계 생물",
+    issue: "시민 휴식 공간으로 인기가 높지만, 수질 오염과 쓰레기 투기가 반복되고 있습니다. 관리가 부족한 공원은 불쾌함과 안전 문제를 만들어냅니다.",
+    cause: "인근 아파트 개발로 이용자가 급증했지만, 환경 관리 인력과 시설이 수요를 따라가지 못하고 있습니다.",
+    who: "공원을 일상 휴식 공간으로 이용하는 주민, 어린이·어르신, 공원 생태계 생물",
     solution: "시민 생태 모니터링 참여, 공원 이용 에티켓 캠페인, 수질 현황 정기 기록.",
     activity: "수질·식생 상태 사진 기록 → 이용자 행동 관찰 메모 → 시 환경부서 제안"
   },
   seochang: {
     badge: "아동·보행안전",
     title: "서창동 학생 통학로 / 서창동",
-    issue: "인도가 없거나 불법 주정차로 좁아진 구간에서 학생들이 차도로 걷고 있습니다. 외곽 학생일수록 더 긴 거리를 더 위험한 환경에서 통학합니다.",
-    cause: "택지 개발이 먼저 이루어지고, 인도·CCTV 등 보행 인프라가 뒤따라오지 못한 전형적인 구조입니다.",
+    issue: "인도가 없거나 불법 주정차로 좁아진 구간에서 학생들이 차도를 걸어야 합니다. 외곽 지역 학생일수록 더 먼 거리를 더 부족한 환경에서 통학합니다.",
+    cause: "택지 개발이 먼저 이루어지고, 인도·CCTV 등 보행 인프라가 뒤따라오지 못한 전형적인 신규 택지 문제입니다.",
     who: "서창동 일대 초·중·고 학생, 특히 원거리 통학 학생",
     solution: "위험 구간 민원 제기, 통학로 보행로 확보 요청, 스쿨존 재점검 촉구.",
     activity: "등하교 시간대 통학로 답사 → 위험 구간 지도 제작 → 학교·구청 공동 발표"
@@ -573,6 +662,13 @@ function clickDistrict(name) {
   }
 }
 
+function handleKey(event, name) {
+  if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault();
+    clickDistrict(name);
+  }
+}
+
 function goBack() {
   closeCard();
   document.getElementById('screen-seo').classList.remove('active');
@@ -582,7 +678,6 @@ function goBack() {
 
 /* ── 카드 열기/닫기 ── */
 function openCard(key) {
-  // 이전 active 해제
   if (activeKey) {
     document.getElementById('marker-' + activeKey)?.classList.remove('marker-active');
     document.getElementById('list-'   + activeKey)?.classList.remove('list-active');
@@ -602,6 +697,9 @@ function openCard(key) {
 
   document.getElementById('overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
+
+  /* 포커스를 닫기 버튼으로 이동 (접근성) */
+  setTimeout(() => document.querySelector('.close-btn')?.focus(), 50);
 }
 
 function closeCard() {
@@ -616,6 +714,13 @@ function closeCard() {
 
 function overlayClick(e) {
   if (e.target === document.getElementById('overlay')) closeCard();
+}
+
+function handleMarkerKey(event, key) {
+  if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault();
+    openCard(key);
+  }
 }
 
 /* ── Escape 키 ── */
