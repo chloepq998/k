@@ -57,8 +57,6 @@ body {
 
 .district:focus-visible polygon { filter: brightness(.82); }
 .marker:focus-visible circle    { stroke: white; stroke-width: 3; }
-.loc-item:focus-visible         { border-color: var(--accent); background: var(--accent-soft); }
-.loc-item:focus-visible .loc-num { background: var(--accent); color: white; border-color: var(--accent); }
 .back-btn:focus-visible         { outline: 2px solid var(--accent); outline-offset: 2px; }
 .close-btn:focus-visible        { outline: 2px solid var(--accent); outline-offset: 2px; }
 
@@ -200,56 +198,13 @@ svg text { pointer-events: none; user-select: none; }
 .marker.marker-active { transform: scale(1.22); }
 .marker.marker-active circle { stroke: white; stroke-width: 3; }
 
-/* ── 장소 목록 ── */
-.loc-list { width: 100%; max-width: 520px; margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }
-.loc-item {
-  display: flex; align-items: center; gap: 12px;
-  background: var(--white); border: 1px solid var(--border);
-  border-radius: 12px; padding: 12px 14px; cursor: pointer;
-  box-shadow: var(--shadow-sm); transition: border-color .15s, background .15s;
-}
-.loc-item:hover     { border-color: var(--accent); background: var(--accent-soft); }
-.loc-item.list-active { border-color: var(--accent); background: var(--accent-soft); }
-.loc-num {
-  width: 28px; height: 28px; border-radius: 50%;
-  background: var(--bg); border: 2px solid var(--border);
-  font-size: 13px; font-weight: 800; color: var(--text-mid);
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-  transition: background .15s, color .15s, border-color .15s;
-}
-.loc-item.list-active .loc-num,
-.loc-item:hover .loc-num { background: var(--accent); color: white; border-color: var(--accent); }
-.loc-text { flex: 1; min-width: 0; }
-.loc-name { font-size: 14px; font-weight: 700; color: var(--text-dark); }
-.loc-tag  { font-size: 11px; color: var(--text-light); margin-top: 2px; }
-.loc-chevron { font-size: 16px; color: var(--border); flex-shrink: 0; }
-
-/* ── 장소 목록: 문제 유형별 색상 ── */
-#list-usquare  .loc-num { border-color: var(--clr-1); color: var(--clr-1); }
-#list-yangdong .loc-num { border-color: var(--clr-2); color: var(--clr-2); }
-#list-sangmu   .loc-num { border-color: var(--clr-3); color: var(--clr-3); }
-#list-pungam   .loc-num { border-color: var(--clr-4); color: var(--clr-4); }
-#list-seochang .loc-num { border-color: var(--clr-5); color: var(--clr-5); }
-#list-usquare:hover  .loc-num, #list-usquare.list-active  .loc-num { background:var(--clr-1); border-color:var(--clr-1); color:white; }
-#list-yangdong:hover .loc-num, #list-yangdong.list-active .loc-num { background:var(--clr-2); border-color:var(--clr-2); color:white; }
-#list-sangmu:hover   .loc-num, #list-sangmu.list-active   .loc-num { background:var(--clr-3); border-color:var(--clr-3); color:white; }
-#list-pungam:hover   .loc-num, #list-pungam.list-active   .loc-num { background:var(--clr-4); border-color:var(--clr-4); color:white; }
-#list-seochang:hover .loc-num, #list-seochang.list-active .loc-num { background:var(--clr-5); border-color:var(--clr-5); color:white; }
-
-/* ── 카드 오버레이 ── */
+/* ── 오버레이 공통 ── */
 .overlay {
   display: none; position: fixed; inset: 0;
   background: rgba(10,18,36,.48); z-index: 200;
   align-items: flex-end; justify-content: center;
 }
 .overlay.open { display: flex; }
-
-.card {
-  background: var(--white); border-radius: 20px 20px 0 0;
-  padding: 24px 20px 36px; width: 100%; max-width: 520px;
-  position: relative; max-height: 90vh; overflow-y: auto;
-  animation: up .22s ease;
-}
 @keyframes up { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
 .card-handle { width: 34px; height: 4px; background: #dde3ee; border-radius: 2px; margin: 0 auto 18px; }
@@ -264,52 +219,6 @@ svg text { pointer-events: none; user-select: none; }
 }
 .close-btn:hover { background: #c8ccda; color: var(--text-dark); }
 
-.card-top-bar {
-  position: absolute; top: 0; left: 0; right: 0; height: 5px;
-  border-radius: 20px 20px 0 0;
-}
-.card-badge {
-  display: inline-block; font-size: 10px; font-weight: 800;
-  letter-spacing: .5px; padding: 3px 10px; border-radius: 20px;
-  background: var(--accent-soft); color: var(--accent); margin-bottom: 8px;
-}
-.card[data-key="usquare"]  .card-badge { background:var(--bg-1); color:var(--clr-1); }
-.card[data-key="yangdong"] .card-badge { background:var(--bg-2); color:var(--clr-2); }
-.card[data-key="sangmu"]   .card-badge { background:var(--bg-3); color:var(--clr-3); }
-.card[data-key="pungam"]   .card-badge { background:var(--bg-4); color:var(--clr-4); }
-.card[data-key="seochang"] .card-badge { background:var(--bg-5); color:var(--clr-5); }
-.card[data-key="usquare"]  .card-top-bar { background:var(--clr-1); }
-.card[data-key="yangdong"] .card-top-bar { background:var(--clr-2); }
-.card[data-key="sangmu"]   .card-top-bar { background:var(--clr-3); }
-.card[data-key="pungam"]   .card-top-bar { background:var(--clr-4); }
-.card[data-key="seochang"] .card-top-bar { background:var(--clr-5); }
-.card[data-key="usquare"]  .record-note { border-color:var(--clr-1); }
-.card[data-key="yangdong"] .record-note { border-color:var(--clr-2); }
-.card[data-key="sangmu"]   .record-note { border-color:var(--clr-3); }
-.card[data-key="pungam"]   .record-note { border-color:var(--clr-4); }
-.card[data-key="seochang"] .record-note { border-color:var(--clr-5); }
-.card h2 {
-  font-size: 17px; font-weight: 800; line-height: 1.35;
-  color: var(--text-dark); margin-bottom: 18px;
-  padding-right: 40px;
-}
-
-.c-row { margin-bottom: 12px; }
-.c-label {
-  font-size: 10px; font-weight: 700; letter-spacing: .8px;
-  color: var(--text-light); text-transform: uppercase; margin-bottom: 4px;
-}
-.c-val { font-size: 13px; color: var(--text-mid); line-height: 1.7; }
-
-hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
-
-.record-note {
-  margin-top: 16px; padding: 12px 14px;
-  background: var(--bg); border-left: 3px solid var(--accent);
-  border-radius: 0 8px 8px 0;
-  font-size: 12px; color: var(--text-mid); line-height: 1.65;
-}
-
 /* ── 키오스크(전체화면) 버튼 ── */
 .kiosk-btn {
   position: fixed; top: 12px; right: 12px; z-index: 400;
@@ -320,119 +229,15 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
 }
 .kiosk-btn:hover { background: rgba(15,23,42,.95); }
 
-/* ── 카드 사진 슬롯 ── */
-.card-photo { width:100%; height:190px; object-fit:cover; border-radius:12px; margin-bottom:14px; display:block; }
-.card-photo-ph {
-  width:100%; height:120px; border-radius:12px; margin-bottom:14px;
-  background:var(--bg); border:2px dashed var(--border);
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  gap:6px; color:var(--text-light); font-size:12px; text-align:center;
-}
-.ph-icon { font-size:26px; }
-
-/* ── 활동 체크리스트 ── */
-.checklist { display:flex; flex-direction:column; gap:10px; margin-top:4px; }
-.check-item {
-  display:flex; align-items:flex-start; gap:10px;
-  cursor:pointer; padding:2px 0; user-select:none;
-}
-.check-box {
-  width:22px; height:22px; border-radius:6px; flex-shrink:0; margin-top:1px;
-  border:2px solid var(--border); background:white;
-  display:flex; align-items:center; justify-content:center;
-  font-size:13px; font-weight:700; transition:background .15s, border-color .15s;
-}
-.check-item.done .check-box { color:white; }
-.check-label { font-size:13px; color:var(--text-mid); line-height:1.5; flex:1; transition:color .15s; }
-.check-item.done .check-label { text-decoration:line-through; color:var(--text-light); }
-.check-progress {
-  font-size:11px; font-weight:700; color:var(--text-light);
-  margin-top:8px; text-align:right;
-}
-.prog-done { color:var(--clr-4); font-size:13px; }
-
-/* 체크박스 색상: 문제 유형별 */
-#card[data-key="usquare"]  .check-item.done .check-box { background:var(--clr-1); border-color:var(--clr-1); }
-#card[data-key="yangdong"] .check-item.done .check-box { background:var(--clr-2); border-color:var(--clr-2); }
-#card[data-key="sangmu"]   .check-item.done .check-box { background:var(--clr-3); border-color:var(--clr-3); }
-#card[data-key="pungam"]   .check-item.done .check-box { background:var(--clr-4); border-color:var(--clr-4); }
-#card[data-key="seochang"] .check-item.done .check-box { background:var(--clr-5); border-color:var(--clr-5); }
-
-/* ── 투표 섹션 ── */
-.vote-section {
-  margin-top:20px; padding:16px 14px; background:var(--bg); border-radius:14px;
-}
-.vote-title { font-size:13px; font-weight:800; color:var(--text-dark); margin-bottom:3px; }
-.vote-sub   { font-size:11px; color:var(--text-light); margin-bottom:12px; }
-.vote-btn {
-  width:100%; padding:12px; border:none; border-radius:10px;
-  font-size:14px; font-weight:700; color:white; cursor:pointer;
-  transition:filter .15s; margin-bottom:14px;
-}
-.vote-btn:hover:not(:disabled) { filter:brightness(1.1); }
-.vote-btn:disabled { background:var(--border) !important; color:var(--text-light); cursor:default; }
-#card[data-key="usquare"]  .vote-btn { background:var(--clr-1); }
-#card[data-key="yangdong"] .vote-btn { background:var(--clr-2); }
-#card[data-key="sangmu"]   .vote-btn { background:var(--clr-3); }
-#card[data-key="pungam"]   .vote-btn { background:var(--clr-4); }
-#card[data-key="seochang"] .vote-btn { background:var(--clr-5); }
-.vote-bars { display:flex; flex-direction:column; gap:8px; }
-.vb-row { display:flex; align-items:center; gap:8px; }
-.vb-name { font-size:10px; color:var(--text-mid); width:68px; flex-shrink:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-.vb-track { flex:1; height:8px; background:var(--border); border-radius:4px; overflow:hidden; }
-.vb-fill  { height:100%; border-radius:4px; min-width:2px; transition:width .45s cubic-bezier(.4,0,.2,1); }
-.vb-count { font-size:10px; font-weight:700; color:var(--text-mid); width:20px; text-align:right; }
-.vb-row.current .vb-name { font-weight:800; color:var(--text-dark); }
-
 /* ── 반응형 ── */
 @media (min-width: 480px) {
-  .hero h1 { font-size: 30px; }
-  .card { padding: 28px 28px 44px; }
-  .card h2 { font-size: 19px; }
+  .dong-panel, .report-panel { padding: 28px 28px 44px; }
+  .dong-panel h2, .report-panel h2 { font-size: 19px; }
 }
 @media (max-width: 360px) {
   .intro-card p { display: none; }
   .intro-card h3 { font-size: 12px; }
-  .hero h1 { font-size: 22px; }
 }
-
-/* ── 남구 장소 목록 색상 ── */
-#list-nam_yangnim .loc-num { border-color:#e8345a; color:#e8345a; }
-#list-nam_bongson .loc-num { border-color:#f07818; color:#f07818; }
-#list-nam_baekun  .loc-num { border-color:#7c3aed; color:#7c3aed; }
-#list-nam_daechon .loc-num { border-color:#16a34a; color:#16a34a; }
-#list-nam_wolsan  .loc-num { border-color:#0284c7; color:#0284c7; }
-#list-nam_yangnim:hover .loc-num, #list-nam_yangnim.list-active .loc-num { background:#e8345a; border-color:#e8345a; color:white; }
-#list-nam_bongson:hover .loc-num, #list-nam_bongson.list-active .loc-num { background:#f07818; border-color:#f07818; color:white; }
-#list-nam_baekun:hover  .loc-num, #list-nam_baekun.list-active  .loc-num { background:#7c3aed; border-color:#7c3aed; color:white; }
-#list-nam_daechon:hover .loc-num, #list-nam_daechon.list-active .loc-num { background:#16a34a; border-color:#16a34a; color:white; }
-#list-nam_wolsan:hover  .loc-num, #list-nam_wolsan.list-active  .loc-num { background:#0284c7; border-color:#0284c7; color:white; }
-/* ── 남구 카드 색상 ── */
-#card[data-key="nam_yangnim"] .card-badge { background:#fde0e6; color:#e8345a; }
-#card[data-key="nam_yangnim"] .card-top-bar { background:#e8345a; }
-#card[data-key="nam_yangnim"] .vote-btn { background:#e8345a; }
-#card[data-key="nam_yangnim"] .check-item.done .check-box { background:#e8345a; border-color:#e8345a; }
-#card[data-key="nam_yangnim"] .record-note { border-color:#e8345a; }
-#card[data-key="nam_bongson"] .card-badge { background:#fff0e0; color:#f07818; }
-#card[data-key="nam_bongson"] .card-top-bar { background:#f07818; }
-#card[data-key="nam_bongson"] .vote-btn { background:#f07818; }
-#card[data-key="nam_bongson"] .check-item.done .check-box { background:#f07818; border-color:#f07818; }
-#card[data-key="nam_bongson"] .record-note { border-color:#f07818; }
-#card[data-key="nam_baekun"] .card-badge { background:#ede9fe; color:#7c3aed; }
-#card[data-key="nam_baekun"] .card-top-bar { background:#7c3aed; }
-#card[data-key="nam_baekun"] .vote-btn { background:#7c3aed; }
-#card[data-key="nam_baekun"] .check-item.done .check-box { background:#7c3aed; border-color:#7c3aed; }
-#card[data-key="nam_baekun"] .record-note { border-color:#7c3aed; }
-#card[data-key="nam_daechon"] .card-badge { background:#dcfce7; color:#16a34a; }
-#card[data-key="nam_daechon"] .card-top-bar { background:#16a34a; }
-#card[data-key="nam_daechon"] .vote-btn { background:#16a34a; }
-#card[data-key="nam_daechon"] .check-item.done .check-box { background:#16a34a; border-color:#16a34a; }
-#card[data-key="nam_daechon"] .record-note { border-color:#16a34a; }
-#card[data-key="nam_wolsan"] .card-badge { background:#e0f2fe; color:#0284c7; }
-#card[data-key="nam_wolsan"] .card-top-bar { background:#0284c7; }
-#card[data-key="nam_wolsan"] .vote-btn { background:#0284c7; }
-#card[data-key="nam_wolsan"] .check-item.done .check-box { background:#0284c7; border-color:#0284c7; }
-#card[data-key="nam_wolsan"] .record-note { border-color:#0284c7; }
 
 /* ── 동 클릭 가능 ── */
 .clickable-dong { cursor: pointer; }
@@ -649,8 +454,9 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
     <div class="guide-title">사용 방법</div>
     <ol>
       <li>지도에서 <strong>서구</strong> 또는 <strong>남구</strong>를 클릭하면 상세 지도로 이동합니다.</li>
-      <li>상세 지도에서 번호 마커 또는 아래 장소 목록을 클릭하세요.</li>
-      <li>각 장소의 문제, 원인, 해결 방법이 담긴 카드가 열립니다.</li>
+      <li>색칠된 동(행정동)을 클릭하면 그 동네 패널이 열립니다.</li>
+      <li>다른 학생들의 제보를 보거나, 직접 문제를 제보할 수 있어요.</li>
+      <li>제보를 남기면 그 동 위치에 지도 핀이 바로 표시돼요.</li>
     </ol>
   </div>
 
@@ -678,16 +484,7 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
 
   <div class="sec-header">
     <h1>서구 지역문제 상세 지도</h1>
-    <p>마커를 클릭하면 문제 카드가 열립니다</p>
-  </div>
-
-  <!-- 컬러 범례 -->
-  <div class="legend" style="max-width:520px;width:100%;margin-bottom:4px;">
-    <span class="legend-item"><span class="legend-dot" style="background:#e8345a"></span>교통·보행</span>
-    <span class="legend-item"><span class="legend-dot" style="background:#f07818"></span>지역경제</span>
-    <span class="legend-item"><span class="legend-dot" style="background:#7c3aed"></span>젠트리피케이션</span>
-    <span class="legend-item"><span class="legend-dot" style="background:#16a34a"></span>환경·생태</span>
-    <span class="legend-item"><span class="legend-dot" style="background:#0284c7"></span>아동·보행</span>
+    <p>색칠된 동을 클릭해서 문제를 둘러보고, 직접 제보를 남겨보세요</p>
   </div>
 
   <!-- 서구 지도 -->
@@ -805,144 +602,10 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
             fill="#e0f2fe" stroke="#7dd3fc" stroke-width="1" stroke-linejoin="round"/>
       <text x="88" y="362" text-anchor="middle" fill="#5a6070" font-size="10" font-weight="700" pointer-events="none">서창동</text>
 
-      <!-- ── 마커 1~5 ── -->
-
-      <!-- 마커 1: U-Square / 광천동 (교통·보행 #e8345a) -->
-      <g class="marker" id="marker-usquare" tabindex="0" role="button"
-         aria-label="1번 마커: U-Square / 광천동"
-         onclick="openCard('usquare')"
-         onkeydown="handleMarkerKey(event,'usquare')">
-        <circle cx="280" cy="100" r="15" fill="none" stroke="#e8345a" stroke-width="2" opacity="0">
-          <animate attributeName="r" values="15;32" dur="2s" repeatCount="indefinite" begin="0s"/>
-          <animate attributeName="opacity" values="0.7;0" dur="2s" repeatCount="indefinite" begin="0s"/>
-        </circle>
-        <circle cx="280" cy="100" r="15" fill="#e8345a" filter="url(#mshadow)"/>
-        <text x="280" y="106" text-anchor="middle" fill="white" font-size="13" font-weight="800" pointer-events="none">1</text>
-        <text x="280" y="81"  text-anchor="middle" fill="#c01040" font-size="9"  font-weight="700" pointer-events="none">U-Square</text>
-      </g>
-
-      <!-- 마커 2: 양동시장 (지역경제 #f07818) -->
-      <g class="marker" id="marker-yangdong" tabindex="0" role="button"
-         aria-label="2번 마커: 양동시장"
-         onclick="openCard('yangdong')"
-         onkeydown="handleMarkerKey(event,'yangdong')">
-        <circle cx="349" cy="158" r="15" fill="none" stroke="#f07818" stroke-width="2" opacity="0">
-          <animate attributeName="r" values="15;32" dur="2s" repeatCount="indefinite" begin="0.4s"/>
-          <animate attributeName="opacity" values="0.7;0" dur="2s" repeatCount="indefinite" begin="0.4s"/>
-        </circle>
-        <circle cx="349" cy="158" r="15" fill="#f07818" filter="url(#mshadow)"/>
-        <text x="349" y="164" text-anchor="middle" fill="white" font-size="13" font-weight="800" pointer-events="none">2</text>
-        <text x="349" y="139" text-anchor="middle" fill="#a05010" font-size="9"  font-weight="700" pointer-events="none">양동시장</text>
-      </g>
-
-      <!-- 마커 3: 상무지구 (젠트리피케이션 #7c3aed) -->
-      <g class="marker" id="marker-sangmu" tabindex="0" role="button"
-         aria-label="3번 마커: 상무지구"
-         onclick="openCard('sangmu')"
-         onkeydown="handleMarkerKey(event,'sangmu')">
-        <circle cx="225" cy="163" r="15" fill="none" stroke="#7c3aed" stroke-width="2" opacity="0">
-          <animate attributeName="r" values="15;32" dur="2s" repeatCount="indefinite" begin="0.8s"/>
-          <animate attributeName="opacity" values="0.7;0" dur="2s" repeatCount="indefinite" begin="0.8s"/>
-        </circle>
-        <circle cx="225" cy="163" r="15" fill="#7c3aed" filter="url(#mshadow)"/>
-        <text x="225" y="169" text-anchor="middle" fill="white" font-size="13" font-weight="800" pointer-events="none">3</text>
-        <text x="225" y="144" text-anchor="middle" fill="#5a1ebd" font-size="9"  font-weight="700" pointer-events="none">상무지구</text>
-      </g>
-
-      <!-- 마커 4: 풍암호수공원 (환경·생태 #16a34a) -->
-      <g class="marker" id="marker-pungam" tabindex="0" role="button"
-         aria-label="4번 마커: 풍암호수공원"
-         onclick="openCard('pungam')"
-         onkeydown="handleMarkerKey(event,'pungam')">
-        <circle cx="266" cy="270" r="15" fill="none" stroke="#16a34a" stroke-width="2" opacity="0">
-          <animate attributeName="r" values="15;32" dur="2s" repeatCount="indefinite" begin="1.2s"/>
-          <animate attributeName="opacity" values="0.7;0" dur="2s" repeatCount="indefinite" begin="1.2s"/>
-        </circle>
-        <circle cx="266" cy="270" r="15" fill="#16a34a" filter="url(#mshadow)"/>
-        <text x="266" y="276" text-anchor="middle" fill="white" font-size="13" font-weight="800" pointer-events="none">4</text>
-        <text x="266" y="251" text-anchor="middle" fill="#0a6030" font-size="9"  font-weight="700" pointer-events="none">풍암호수공원</text>
-      </g>
-
-      <!-- 마커 5: 서창동 통학로 (아동·보행 #0284c7) -->
-      <g class="marker" id="marker-seochang" tabindex="0" role="button"
-         aria-label="5번 마커: 서창동 통학로"
-         onclick="openCard('seochang')"
-         onkeydown="handleMarkerKey(event,'seochang')">
-        <circle cx="95"  cy="330" r="15" fill="none" stroke="#0284c7" stroke-width="2" opacity="0">
-          <animate attributeName="r" values="15;32" dur="2s" repeatCount="indefinite" begin="1.6s"/>
-          <animate attributeName="opacity" values="0.7;0" dur="2s" repeatCount="indefinite" begin="1.6s"/>
-        </circle>
-        <circle cx="95"  cy="330" r="15" fill="#0284c7" filter="url(#mshadow)"/>
-        <text x="95"  y="336" text-anchor="middle" fill="white" font-size="13" font-weight="800" pointer-events="none">5</text>
-        <text x="95"  y="311" text-anchor="middle" fill="#015080" font-size="9"  font-weight="700" pointer-events="none">서창 통학로</text>
-      </g>
+      <!-- ── 학생 제보 핀 (Firebase 실시간) ── -->
+      <g id="rmarkers-seo"></g>
 
     </svg>
-  </div>
-
-  <!-- 장소 목록 -->
-  <div class="loc-list" role="list">
-
-    <div class="loc-item" id="list-usquare" tabindex="0" role="listitem button"
-         aria-label="1번 장소: U-Square / 광천동 카드 열기"
-         onclick="openCard('usquare')"
-         onkeydown="handleMarkerKey(event,'usquare')">
-      <span class="loc-num" aria-hidden="true">1</span>
-      <div class="loc-text">
-        <div class="loc-name">U-Square / 광천동</div>
-        <div class="loc-tag">교통·보행안전</div>
-      </div>
-      <span class="loc-chevron" aria-hidden="true">›</span>
-    </div>
-
-    <div class="loc-item" id="list-yangdong" tabindex="0" role="listitem button"
-         aria-label="2번 장소: 양동시장 / 양동 카드 열기"
-         onclick="openCard('yangdong')"
-         onkeydown="handleMarkerKey(event,'yangdong')">
-      <span class="loc-num" aria-hidden="true">2</span>
-      <div class="loc-text">
-        <div class="loc-name">양동시장 / 양동</div>
-        <div class="loc-tag">지역경제·재생</div>
-      </div>
-      <span class="loc-chevron" aria-hidden="true">›</span>
-    </div>
-
-    <div class="loc-item" id="list-sangmu" tabindex="0" role="listitem button"
-         aria-label="3번 장소: 상무지구 카드 열기"
-         onclick="openCard('sangmu')"
-         onkeydown="handleMarkerKey(event,'sangmu')">
-      <span class="loc-num" aria-hidden="true">3</span>
-      <div class="loc-text">
-        <div class="loc-name">상무지구 / 상무동·치평동</div>
-        <div class="loc-tag">젠트리피케이션</div>
-      </div>
-      <span class="loc-chevron" aria-hidden="true">›</span>
-    </div>
-
-    <div class="loc-item" id="list-pungam" tabindex="0" role="listitem button"
-         aria-label="4번 장소: 풍암호수공원 카드 열기"
-         onclick="openCard('pungam')"
-         onkeydown="handleMarkerKey(event,'pungam')">
-      <span class="loc-num" aria-hidden="true">4</span>
-      <div class="loc-text">
-        <div class="loc-name">풍암호수공원 / 풍암동</div>
-        <div class="loc-tag">환경·생태관리</div>
-      </div>
-      <span class="loc-chevron" aria-hidden="true">›</span>
-    </div>
-
-    <div class="loc-item" id="list-seochang" tabindex="0" role="listitem button"
-         aria-label="5번 장소: 서창동 통학로 카드 열기"
-         onclick="openCard('seochang')"
-         onkeydown="handleMarkerKey(event,'seochang')">
-      <span class="loc-num" aria-hidden="true">5</span>
-      <div class="loc-text">
-        <div class="loc-name">서창동 통학로 / 서창동</div>
-        <div class="loc-tag">아동·보행안전</div>
-      </div>
-      <span class="loc-chevron" aria-hidden="true">›</span>
-    </div>
-
   </div>
 
 </div><!-- /screen-seo -->
@@ -965,16 +628,7 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
 
   <div class="sec-header">
     <h1>남구 지역문제 상세 지도</h1>
-    <p>마커를 클릭하면 문제 카드가 열립니다</p>
-  </div>
-
-  <!-- 컬러 범례 -->
-  <div class="legend" style="max-width:520px;width:100%;margin-bottom:4px;">
-    <span class="legend-item"><span class="legend-dot" style="background:#e8345a"></span>관광·도시재생</span>
-    <span class="legend-item"><span class="legend-dot" style="background:#f07818"></span>교통·주차</span>
-    <span class="legend-item"><span class="legend-dot" style="background:#7c3aed"></span>주거·재개발</span>
-    <span class="legend-item"><span class="legend-dot" style="background:#16a34a"></span>농촌·교통취약</span>
-    <span class="legend-item"><span class="legend-dot" style="background:#0284c7"></span>빈집·도시쇠퇴</span>
+    <p>색칠된 동을 클릭해서 문제를 둘러보고, 직접 제보를 남겨보세요</p>
   </div>
 
   <!-- 남구 지도 -->
@@ -1085,144 +739,10 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
             onclick="openDong('nam_daechon','대촌동','남구')"/>
       <text x="169.0" y="340" text-anchor="middle" fill="#5a6070" font-size="10" font-weight="700" pointer-events="none">대촌동</text>
 
-      <!-- ── 마커 1~5 ── -->
-
-      <!-- 마커 1: 양림동 (관광·도시재생 #e8345a) -->
-      <g class="marker" id="marker-nam_yangnim" tabindex="0" role="button"
-         aria-label="1번 마커: 양림동 역사문화마을"
-         onclick="openCard('nam_yangnim')"
-         onkeydown="handleMarkerKey(event,'nam_yangnim')">
-        <circle cx="348" cy="92" r="15" fill="none" stroke="#e8345a" stroke-width="2" opacity="0">
-          <animate attributeName="r" values="15;32" dur="2s" repeatCount="indefinite" begin="0s"/>
-          <animate attributeName="opacity" values="0.7;0" dur="2s" repeatCount="indefinite" begin="0s"/>
-        </circle>
-        <circle cx="348" cy="92" r="15" fill="#e8345a" filter="url(#mshadow-nam)"/>
-        <text x="348" y="98" text-anchor="middle" fill="white" font-size="13" font-weight="800" pointer-events="none">1</text>
-        <text x="348" y="73" text-anchor="middle" fill="#c01040" font-size="9" font-weight="700" pointer-events="none">양림동</text>
-      </g>
-
-      <!-- 마커 2: 봉선동 (교통·주차 #f07818) -->
-      <g class="marker" id="marker-nam_bongson" tabindex="0" role="button"
-         aria-label="2번 마커: 봉선 상업지구"
-         onclick="openCard('nam_bongson')"
-         onkeydown="handleMarkerKey(event,'nam_bongson')">
-        <circle cx="340" cy="152" r="15" fill="none" stroke="#f07818" stroke-width="2" opacity="0">
-          <animate attributeName="r" values="15;32" dur="2s" repeatCount="indefinite" begin="0.4s"/>
-          <animate attributeName="opacity" values="0.7;0" dur="2s" repeatCount="indefinite" begin="0.4s"/>
-        </circle>
-        <circle cx="340" cy="152" r="15" fill="#f07818" filter="url(#mshadow-nam)"/>
-        <text x="340" y="158" text-anchor="middle" fill="white" font-size="13" font-weight="800" pointer-events="none">2</text>
-        <text x="340" y="133" text-anchor="middle" fill="#a05010" font-size="9" font-weight="700" pointer-events="none">봉선동</text>
-      </g>
-
-      <!-- 마커 3: 백운동 (주거·재개발 #7c3aed) -->
-      <g class="marker" id="marker-nam_baekun" tabindex="0" role="button"
-         aria-label="3번 마커: 백운광장 일대"
-         onclick="openCard('nam_baekun')"
-         onkeydown="handleMarkerKey(event,'nam_baekun')">
-        <circle cx="313" cy="100" r="15" fill="none" stroke="#7c3aed" stroke-width="2" opacity="0">
-          <animate attributeName="r" values="15;32" dur="2s" repeatCount="indefinite" begin="0.8s"/>
-          <animate attributeName="opacity" values="0.7;0" dur="2s" repeatCount="indefinite" begin="0.8s"/>
-        </circle>
-        <circle cx="313" cy="100" r="15" fill="#7c3aed" filter="url(#mshadow-nam)"/>
-        <text x="313" y="106" text-anchor="middle" fill="white" font-size="13" font-weight="800" pointer-events="none">3</text>
-        <text x="313" y="81" text-anchor="middle" fill="#5a1ebd" font-size="9" font-weight="700" pointer-events="none">백운동</text>
-      </g>
-
-      <!-- 마커 4: 대촌동 (농촌·교통취약 #16a34a) -->
-      <g class="marker" id="marker-nam_daechon" tabindex="0" role="button"
-         aria-label="4번 마커: 대촌동 농촌마을"
-         onclick="openCard('nam_daechon')"
-         onkeydown="handleMarkerKey(event,'nam_daechon')">
-        <circle cx="160" cy="340" r="15" fill="none" stroke="#16a34a" stroke-width="2" opacity="0">
-          <animate attributeName="r" values="15;32" dur="2s" repeatCount="indefinite" begin="1.2s"/>
-          <animate attributeName="opacity" values="0.7;0" dur="2s" repeatCount="indefinite" begin="1.2s"/>
-        </circle>
-        <circle cx="160" cy="340" r="15" fill="#16a34a" filter="url(#mshadow-nam)"/>
-        <text x="160" y="346" text-anchor="middle" fill="white" font-size="13" font-weight="800" pointer-events="none">4</text>
-        <text x="160" y="321" text-anchor="middle" fill="#0a6030" font-size="9" font-weight="700" pointer-events="none">대촌동</text>
-      </g>
-
-      <!-- 마커 5: 월산동 (빈집·도시쇠퇴 #0284c7) -->
-      <g class="marker" id="marker-nam_wolsan" tabindex="0" role="button"
-         aria-label="5번 마커: 월산동 구도심"
-         onclick="openCard('nam_wolsan')"
-         onkeydown="handleMarkerKey(event,'nam_wolsan')">
-        <circle cx="303" cy="48" r="15" fill="none" stroke="#0284c7" stroke-width="2" opacity="0">
-          <animate attributeName="r" values="15;32" dur="2s" repeatCount="indefinite" begin="1.6s"/>
-          <animate attributeName="opacity" values="0.7;0" dur="2s" repeatCount="indefinite" begin="1.6s"/>
-        </circle>
-        <circle cx="303" cy="48" r="15" fill="#0284c7" filter="url(#mshadow-nam)"/>
-        <text x="303" y="54" text-anchor="middle" fill="white" font-size="13" font-weight="800" pointer-events="none">5</text>
-        <text x="303" y="29" text-anchor="middle" fill="#015080" font-size="9" font-weight="700" pointer-events="none">월산동</text>
-      </g>
+      <!-- ── 학생 제보 핀 (Firebase 실시간) ── -->
+      <g id="rmarkers-nam"></g>
 
     </svg>
-  </div>
-
-  <!-- 장소 목록 -->
-  <div class="loc-list" role="list">
-
-    <div class="loc-item" id="list-nam_yangnim" tabindex="0" role="listitem button"
-         aria-label="1번 장소: 양림동 역사문화마을 카드 열기"
-         onclick="openCard('nam_yangnim')"
-         onkeydown="handleMarkerKey(event,'nam_yangnim')">
-      <span class="loc-num" aria-hidden="true">1</span>
-      <div class="loc-text">
-        <div class="loc-name">양림동 역사문화마을 / 양림동</div>
-        <div class="loc-tag">관광·도시재생</div>
-      </div>
-      <span class="loc-chevron" aria-hidden="true">›</span>
-    </div>
-
-    <div class="loc-item" id="list-nam_bongson" tabindex="0" role="listitem button"
-         aria-label="2번 장소: 봉선 상업지구 카드 열기"
-         onclick="openCard('nam_bongson')"
-         onkeydown="handleMarkerKey(event,'nam_bongson')">
-      <span class="loc-num" aria-hidden="true">2</span>
-      <div class="loc-text">
-        <div class="loc-name">봉선 상업지구 / 봉선1·2동</div>
-        <div class="loc-tag">교통·주차</div>
-      </div>
-      <span class="loc-chevron" aria-hidden="true">›</span>
-    </div>
-
-    <div class="loc-item" id="list-nam_baekun" tabindex="0" role="listitem button"
-         aria-label="3번 장소: 백운광장 일대 카드 열기"
-         onclick="openCard('nam_baekun')"
-         onkeydown="handleMarkerKey(event,'nam_baekun')">
-      <span class="loc-num" aria-hidden="true">3</span>
-      <div class="loc-text">
-        <div class="loc-name">백운광장 일대 / 백운1·2동</div>
-        <div class="loc-tag">주거·재개발</div>
-      </div>
-      <span class="loc-chevron" aria-hidden="true">›</span>
-    </div>
-
-    <div class="loc-item" id="list-nam_daechon" tabindex="0" role="listitem button"
-         aria-label="4번 장소: 대촌동 농촌마을 카드 열기"
-         onclick="openCard('nam_daechon')"
-         onkeydown="handleMarkerKey(event,'nam_daechon')">
-      <span class="loc-num" aria-hidden="true">4</span>
-      <div class="loc-text">
-        <div class="loc-name">대촌동 농촌마을 / 대촌동</div>
-        <div class="loc-tag">농촌·교통취약</div>
-      </div>
-      <span class="loc-chevron" aria-hidden="true">›</span>
-    </div>
-
-    <div class="loc-item" id="list-nam_wolsan" tabindex="0" role="listitem button"
-         aria-label="5번 장소: 월산동 구도심 카드 열기"
-         onclick="openCard('nam_wolsan')"
-         onkeydown="handleMarkerKey(event,'nam_wolsan')">
-      <span class="loc-num" aria-hidden="true">5</span>
-      <div class="loc-text">
-        <div class="loc-name">월산동 구도심 / 월산동</div>
-        <div class="loc-tag">빈집·도시쇠퇴</div>
-      </div>
-      <span class="loc-chevron" aria-hidden="true">›</span>
-    </div>
-
   </div>
 
 </div><!-- /screen-nam -->
@@ -1237,7 +757,6 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
     <button class="close-btn" onclick="closeDong()">✕</button>
     <span class="dong-badge" id="dong-district-badge">서구</span>
     <h2 id="dong-title">동 이름</h2>
-    <div id="dong-research-link"></div>
     <div class="dong-legend-hint" id="dong-legend-hint"></div>
     <div class="dong-reports-header">
       <div class="dong-reports-title">📋 학생 제보 목록</div>
@@ -1292,180 +811,9 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 11px 0; }
 </div>
 
 <!-- =========================================================
-  카드 오버레이
-========================================================= -->
-<div class="overlay" id="overlay" onclick="overlayClick(event)" role="dialog" aria-modal="true" aria-labelledby="c-title">
-  <div class="card" id="card">
-    <div class="card-top-bar" aria-hidden="true"></div>
-    <div class="card-handle" aria-hidden="true"></div>
-    <button class="close-btn" onclick="closeCard()" aria-label="카드 닫기">✕</button>
-
-    <!-- 사진 슬롯 -->
-    <div id="c-photo"></div>
-
-    <span class="card-badge" id="c-badge"></span>
-    <h2 id="c-title"></h2>
-
-    <div class="c-row">
-      <div class="c-label">이 장소에서 보이는 문제</div>
-      <div class="c-val" id="c-issue"></div>
-    </div>
-    <hr class="div">
-    <div class="c-row">
-      <div class="c-label">문제의 원인</div>
-      <div class="c-val" id="c-cause"></div>
-    </div>
-    <hr class="div">
-    <div class="c-row">
-      <div class="c-label">영향을 받는 사람</div>
-      <div class="c-val" id="c-who"></div>
-    </div>
-    <hr class="div">
-    <div class="c-row">
-      <div class="c-label">바꿀 수 있는 방법</div>
-      <div class="c-val" id="c-solution"></div>
-    </div>
-    <hr class="div">
-    <div class="c-row">
-      <div class="c-label">✅ 우리가 할 수 있는 기록 활동</div>
-      <div class="c-val" id="c-activity"></div>
-    </div>
-
-    <div class="record-note" id="c-note">
-      📷 이 장소를 직접 관찰한다면 사진, 시간대, 이용자 반응을 함께 기록해 보세요.
-    </div>
-
-    <!-- 방문자 투표 -->
-    <div class="vote-section">
-      <div class="vote-title">🗳️ 이 문제, 얼마나 시급하다고 생각하나요?</div>
-      <div class="vote-sub">관람객 1인 1회 투표 · 새로고침해도 유지됩니다</div>
-      <button class="vote-btn" id="vote-btn">👍 이 문제가 시급하다고 생각해요</button>
-      <div class="vote-bars" id="vote-bars"></div>
-    </div>
-  </div>
-</div>
-
-
-<!-- =========================================================
   SCRIPTS
 ========================================================= -->
 <script>
-/* ── 카드 데이터 ── */
-const CARDS = {
-  usquare: {
-    badge: "교통·보행안전",
-    title: "U-Square / 광천동 버스터미널",
-    photo: null,  // 현장 사진 경로를 여기에 입력 (예: "photos/usquare.jpg")
-    issue: "수만 명이 오가는 환승 거점이지만, 쇼핑몰 동선과 버스 동선이 뒤섞여 있어 보행자가 차도 옆을 걸어야 하는 상황이 반복됩니다.",
-    cause: "상업 시설 확장을 중심으로 공간이 설계되면서, 보행자·교통약자 동선이 후순위로 밀렸습니다.",
-    who: "대중교통 이용자, 휠체어 사용자, 심야 귀가 여성, 어르신",
-    solution: "교통약자 우선 동선 안내 개선, 보행자 횡단 환경 재설계, 심야 안전 귀가 서비스 연계.",
-    activity: ["혼잡 시간대 보행 동선 직접 답사", "위험 구간 사진 기록 및 지도 제작", "구청 교통 부서에 제안서 제출"]
-  },
-  yangdong: {
-    badge: "지역경제·재생",
-    title: "양동시장 / 양동",
-    photo: null,
-    issue: "점포 공실이 늘고 상인 평균 연령이 높아졌습니다. 오래된 시장은 낡은 공간이 아니라 지역 기억과 생계가 담긴 공간인데, 그 가치가 점점 외면받고 있습니다.",
-    cause: "대형마트·온라인 쇼핑으로 방문객이 줄었고, 청년 창업 진입 장벽이 높아 세대 교체도 어렵습니다.",
-    who: "시장을 생계 터전으로 삼는 고령 상인, 저렴한 식재료에 의존하는 저소득 주민",
-    solution: "지역 SNS 홍보 자원봉사, 청년 팝업 공간 연계 제안, 시장 문화 행사 기획.",
-    activity: ["상인 구술 인터뷰 기록", "공실 현황 사진 및 데이터 수집", "시장 알리기 카드뉴스 제작·배포"]
-  },
-  sangmu: {
-    badge: "젠트리피케이션",
-    title: "상무지구 / 상무동·치평동",
-    photo: null,
-    issue: "대형 상업시설이 들어서면서 소규모 가게와 오랜 주거 공간이 밀려나고 있습니다. 화려한 상권 뒤에서 생활 공간이 사라지는 구조입니다.",
-    cause: "임대료 상승과 상업화 압력으로, 소상공인과 기존 주민이 감당하기 어려운 환경이 만들어졌습니다.",
-    who: "오랫동안 자리를 지켜온 소상공인, 인근 주거 지역 주민, 야간 안전이 필요한 청소년",
-    solution: "상권 변화 모니터링 기록, 소상공인 지원 정책 제안, 청소년 안전 취약 구간 조사.",
-    activity: ["상가 변화 전후 사진 비교 기록", "빈 점포 위치 지도 직접 제작", "지역 변화 아카이브 온라인 공개"]
-  },
-  pungam: {
-    badge: "환경·생태관리",
-    title: "풍암호수공원 / 풍암동",
-    photo: null,
-    issue: "시민 휴식 공간으로 인기가 높지만, 수질 오염과 쓰레기 투기가 반복되고 있습니다. 관리가 부족한 공원은 불쾌함과 안전 문제를 만들어냅니다.",
-    cause: "인근 아파트 개발로 이용자가 급증했지만, 환경 관리 인력과 시설이 수요를 따라가지 못하고 있습니다.",
-    who: "공원을 일상 휴식 공간으로 이용하는 주민, 어린이·어르신, 공원 생태계 생물",
-    solution: "시민 생태 모니터링 참여, 공원 이용 에티켓 캠페인, 수질 현황 정기 기록.",
-    activity: ["수질·식생 상태 정기 사진 기록", "이용자 행동 관찰 및 메모", "시 환경부서에 결과 보고서 제출"]
-  },
-  seochang: {
-    badge: "아동·보행안전",
-    title: "서창동 학생 통학로 / 서창동",
-    photo: null,
-    issue: "인도가 없거나 불법 주정차로 좁아진 구간에서 학생들이 차도를 걸어야 합니다. 외곽 지역 학생일수록 더 먼 거리를 더 부족한 환경에서 통학합니다.",
-    cause: "택지 개발이 먼저 이루어지고, 인도·CCTV 등 보행 인프라가 뒤따라오지 못한 전형적인 신규 택지 문제입니다.",
-    who: "서창동 일대 초·중·고 학생, 특히 원거리 통학 학생",
-    solution: "위험 구간 민원 제기, 통학로 보행로 확보 요청, 스쿨존 재점검 촉구.",
-    activity: ["등하교 시간대 통학로 직접 답사", "위험 구간 사진·영상 기록 및 지도화", "학교·구청 합동 발표 및 개선 요청"]
-  },
-  nam_yangnim: {
-    badge: "관광·도시재생",
-    title: "양림동 역사문화마을 / 양림동·방림1동",
-    photo: null,
-    issue: "근대 역사 건축물이 밀집한 양림동이 관광지로 알려지면서, 카페·숍이 늘고 주민 생활 공간이 줄어들고 있습니다. 문화가 자원이 되는 동시에 원주민은 밀려납니다.",
-    cause: "역사문화마을 지정 이후 상업화 압력이 커졌고, 임대료 상승이 오래된 주민과 소규모 가게를 내몰고 있습니다.",
-    who: "양림동 오랜 거주 주민, 원래 있던 소규모 가게 운영자, 고령 시민",
-    solution: "문화재 보존과 주민 생활 공간 균형 정책 요구, 과도한 상업화 모니터링, 지역 기억 보존 활동.",
-    activity: ["관광 전후 골목 변화 사진 비교 기록", "주민 인터뷰로 생활 공간 침해 사례 수집", "양림동 아카이브 전시 기획 참여"]
-  },
-  nam_bongson: {
-    badge: "교통·주차",
-    title: "봉선 상업지구 / 봉선1동·봉선2동",
-    photo: null,
-    issue: "음식점·카페가 밀집한 봉선동 상권은 주말마다 극심한 주차 혼잡을 겪습니다. 불법 주정차로 좁아진 도로에서 보행자와 차량이 뒤섞입니다.",
-    cause: "상업 시설 증가 속도를 주차 공간 공급이 따라가지 못했고, 인근 주거지 도로가 주차장처럼 사용되고 있습니다.",
-    who: "봉선동 인근 주거 주민, 주말 방문객, 보행 중인 어린이·어르신",
-    solution: "공영 주차장 확충 요구, 주거지 불법 주정차 단속 강화, 보행 우선 구간 지정 제안.",
-    activity: ["주말 혼잡 시간대 주차·보행 현황 사진 기록", "불법 주정차 위치 지도 제작", "구청 교통과에 개선 요청서 제출"]
-  },
-  nam_baekun: {
-    badge: "주거·재개발",
-    title: "백운광장 일대 / 백운1동·백운2동",
-    photo: null,
-    issue: "노후 주택이 밀집한 백운동 일대에서 재개발 논의가 진행 중입니다. 새 건물이 들어서면 오래 살아온 주민들이 보증금·임대료를 감당하지 못해 떠나야 합니다.",
-    cause: "노후화된 주거 환경 개선이 필요하지만, 재개발 이익이 원주민보다 개발업체에 집중되는 구조가 반복됩니다.",
-    who: "저소득 임차인, 노후 주택 거주 고령 주민, 수십 년 살아온 장기 거주자",
-    solution: "임차인 권리 강화 정책 요구, 공공 임대 주택 공급 촉구, 재개발 과정 투명성 감시.",
-    activity: ["노후 주거지 실태 사진 기록", "재개발 찬반 주민 의견 설문·인터뷰", "공청회 참석 및 의견서 제출"]
-  },
-  nam_daechon: {
-    badge: "농촌·교통취약",
-    title: "대촌동 농촌마을 / 대촌동",
-    photo: null,
-    issue: "광주 유일의 농촌 지역인 대촌동은 버스 노선이 적어 자가용 없이는 이동이 어렵습니다. 고령 농민은 병원·시장을 가기 위해 몇 시간을 기다려야 합니다.",
-    cause: "도시 확장의 혜택이 외곽 농촌 지역까지 미치지 못하고, 대중교통 수요가 적다는 이유로 노선 감소가 반복됩니다.",
-    who: "대촌동 고령 농민, 자가용 없는 주민, 의료·복지 서비스가 필요한 취약계층",
-    solution: "수요 응답형 소형버스 도입 요구, 농촌 지역 공공 의료·복지 서비스 접근성 개선 제안.",
-    activity: ["버스 배차 간격·노선 현황 직접 조사", "주민 이동 불편 사례 인터뷰", "교통 취약 농촌 지도 제작·발표"]
-  },
-  nam_wolsan: {
-    badge: "빈집·도시쇠퇴",
-    title: "월산동 구도심 / 월산동·월산4동",
-    photo: null,
-    issue: "인구가 줄면서 빈집과 공실 상가가 늘어나고, 방치된 건물이 우범 공간이 되거나 미관을 해치고 있습니다. 골목 상권도 함께 사라지고 있습니다.",
-    cause: "신도심·외곽 개발로 인구가 빠져나갔고, 빈집에 대한 체계적 관리 정책이 부족합니다.",
-    who: "남아있는 주거 주민(특히 어르신), 골목 상권 소상공인, 지역 공동체 구성원",
-    solution: "빈집 실태 조사 및 공공 활용 방안 제안, 커뮤니티 공간 조성, 골목 재생 프로그램 기획.",
-    activity: ["빈집·공실 현황 직접 조사 및 사진 기록", "5년 전후 거리 변화 사진 비교", "빈집 활용 아이디어 주민 제안 공모"]
-  }
-};
-
-let activeKey = null;
-
-/* ── 투표 상수 ── */
-const ISSUE_COLORS = {
-  usquare:'#e8345a', yangdong:'#f07818', sangmu:'#7c3aed', pungam:'#16a34a', seochang:'#0284c7',
-  nam_yangnim:'#e8345a', nam_bongson:'#f07818', nam_baekun:'#7c3aed', nam_daechon:'#16a34a', nam_wolsan:'#0284c7'
-};
-const ISSUE_NAMES = {
-  usquare:'U-Square', yangdong:'양동시장', sangmu:'상무지구', pungam:'풍암공원', seochang:'서창동',
-  nam_yangnim:'양림동', nam_bongson:'봉선동', nam_baekun:'백운동', nam_daechon:'대촌동', nam_wolsan:'월산동'
-};
-
 /* ── 키오스크(전체화면) ── */
 function toggleKiosk() {
   if (!document.fullscreenElement) {
@@ -1478,81 +826,13 @@ document.addEventListener('fullscreenchange', () => {
   document.getElementById('kiosk-btn').textContent = document.fullscreenElement ? '⊡' : '⛶';
 });
 
-/* ── 사진 슬롯 렌더링 ── */
-function renderPhoto(photo) {
-  const slot = document.getElementById('c-photo');
-  if (photo) {
-    slot.innerHTML = `<img class="card-photo" src="${photo}" alt="현장 사진">`;
-  } else {
-    slot.innerHTML = `<div class="card-photo-ph"><span class="ph-icon">📷</span><span>현장 사진 — 촬영 후 추가 예정</span></div>`;
-  }
-}
-
-/* ── 활동 체크리스트 ── */
-function renderChecklist(key, steps) {
-  const saved = JSON.parse(localStorage.getItem('chk-' + key) || '[]');
-  const done  = saved.filter(Boolean).length;
-  const items = steps.map((s, i) => `
-    <div class="check-item ${saved[i] ? 'done' : ''}" onclick="toggleCheck('${key}',${i},this)">
-      <div class="check-box">${saved[i] ? '✓' : ''}</div>
-      <span class="check-label">${s}</span>
-    </div>`).join('');
-  document.getElementById('c-activity').innerHTML =
-    `<div class="checklist">${items}</div>
-     <div class="check-progress" id="chk-prog-${key}">
-       <span class="prog-done">${done}</span> / ${steps.length} 완료
-     </div>`;
-}
-
-function toggleCheck(key, idx, el) {
-  const saved = JSON.parse(localStorage.getItem('chk-' + key) || '[]');
-  saved[idx] = !saved[idx];
-  localStorage.setItem('chk-' + key, JSON.stringify(saved));
-  el.classList.toggle('done', !!saved[idx]);
-  el.querySelector('.check-box').textContent = saved[idx] ? '✓' : '';
-  const done  = saved.filter(Boolean).length;
-  const total = CARDS[key].activity.length;
-  const prog  = document.getElementById('chk-prog-' + key);
-  if (prog) prog.innerHTML = `<span class="prog-done">${done}</span> / ${total} 완료`;
-}
-
-/* ── 방문자 투표 ── */
-function getVotes() {
-  return JSON.parse(localStorage.getItem('gj-votes') || '{}');
-}
-
-function castVote(key) {
-  const votes = getVotes();
-  votes[key] = (votes[key] || 0) + 1;
-  localStorage.setItem('gj-votes', JSON.stringify(votes));
-  sessionStorage.setItem('voted-' + key, '1');
-  renderVoteBars(key);
-  const btn = document.getElementById('vote-btn');
-  btn.disabled = true;
-  btn.textContent = '✓ 투표 완료! 고마워요';
-}
-
-function renderVoteBars(currentKey) {
-  const votes = getVotes();
-  const isNam = currentKey.startsWith('nam_');
-  const keys = Object.keys(ISSUE_COLORS).filter(k => k.startsWith('nam_') === isNam);
-  const max = Math.max(1, ...keys.map(k => votes[k] || 0));
-  document.getElementById('vote-bars').innerHTML = keys.map(k => `
-    <div class="vb-row ${k === currentKey ? 'current' : ''}">
-      <span class="vb-name">${ISSUE_NAMES[k]}</span>
-      <div class="vb-track">
-        <div class="vb-fill" style="width:${((votes[k]||0)/max*100).toFixed(1)}%;background:${ISSUE_COLORS[k]}"></div>
-      </div>
-      <span class="vb-count">${votes[k]||0}</span>
-    </div>`).join('');
-}
-
 /* ── 화면 전환 ── */
 function clickDistrict(name) {
   if (name === 'seo' || name === 'nam') {
     document.getElementById('screen-gwangju').classList.remove('active');
     document.getElementById('screen-' + name).classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    startMarkersListener(name);
   } else {
     const labels = { buk:'북구', gwangsan:'광산구', dong:'동구' };
     alert(`${labels[name]} 상세 지도는 다음 버전에서 공개됩니다.`);
@@ -1564,65 +844,17 @@ function handleKey(event, name) {
 }
 
 function goBack() {
-  closeCard();
+  closeDong();
+  closeReportForm();
+  stopMarkersListener();
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-gwangju').classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-/* ── 카드 열기/닫기 ── */
-function openCard(key) {
-  if (activeKey) {
-    document.getElementById('marker-' + activeKey)?.classList.remove('marker-active');
-    document.getElementById('list-'   + activeKey)?.classList.remove('list-active');
-  }
-  activeKey = key;
-  document.getElementById('marker-' + key)?.classList.add('marker-active');
-  document.getElementById('list-'   + key)?.classList.add('list-active');
-
-  const d = CARDS[key];
-  document.getElementById('card').dataset.key    = key;
-  document.getElementById('c-badge').textContent = d.badge;
-  document.getElementById('c-title').textContent = d.title;
-  document.getElementById('c-issue').textContent = d.issue;
-  document.getElementById('c-cause').textContent = d.cause;
-  document.getElementById('c-who').textContent   = d.who;
-  document.getElementById('c-solution').textContent = d.solution;
-
-  renderPhoto(d.photo);
-  renderChecklist(key, d.activity);
-  renderVoteBars(key);
-
-  const alreadyVoted = sessionStorage.getItem('voted-' + key);
-  const btn = document.getElementById('vote-btn');
-  btn.disabled    = !!alreadyVoted;
-  btn.textContent = alreadyVoted ? '✓ 투표 완료! 고마워요' : '👍 이 문제가 시급하다고 생각해요';
-  btn.onclick     = () => castVote(key);
-
-  document.getElementById('overlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-  setTimeout(() => document.querySelector('.close-btn')?.focus(), 50);
-}
-
-function closeCard() {
-  if (activeKey) {
-    document.getElementById('marker-' + activeKey)?.classList.remove('marker-active');
-    document.getElementById('list-'   + activeKey)?.classList.remove('list-active');
-    activeKey = null;
-  }
-  document.getElementById('overlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-function overlayClick(e) {
-  if (e.target === document.getElementById('overlay')) closeCard();
-}
-
-function handleMarkerKey(event, key) {
-  if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openCard(key); }
-}
-
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCard(); });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeReportForm(); closeDong(); }
+});
 
 // ── Firebase 초기화 ──
 const firebaseConfig = {
@@ -1637,17 +869,62 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// ── 연구 카드 연결 맵 ──
-const DONG_CARD_MAP = {
-  seo_pungam:   'pungam',
-  seo_sangmu:   'sangmu',
-  nam_yangnim:  'nam_yangnim',
-  nam_bongson1: 'nam_bongson',
-  nam_bongson2: 'nam_bongson',
-  nam_baekun1:  'nam_baekun',
-  nam_baekun2:  'nam_baekun',
-  nam_daechon:  'nam_daechon',
-  nam_wolsan_m: 'nam_wolsan',
+// ── 동별 지도 좌표 (마커 표시용) ──
+const DONG_CENTROIDS = {
+  seo_hwajung: { x: 269, y: 183 },
+  seo_sangmu:  { x: 220, y: 165 },
+  seo_geumho:  { x: 203, y: 248 },
+  seo_pungam:  { x: 265, y: 272 },
+
+  nam_yangnim:  { x: 344, y: 89 },
+  nam_bangnim1: { x: 346, y: 111 },
+  nam_bangnim2: { x: 362, y: 130 },
+  nam_sajik:    { x: 336, y: 63 },
+  nam_wolsan_m: { x: 314, y: 55 },
+  nam_wolsan4:  { x: 298, y: 61 },
+  nam_wolsan5:  { x: 306, y: 78 },
+  nam_baekun1:  { x: 328, y: 82 },
+  nam_baekun2:  { x: 324, y: 98 },
+  nam_juwol1:   { x: 311, y: 129 },
+  nam_juwol2:   { x: 295, y: 94 },
+  nam_hyodeok:  { x: 318, y: 216 },
+  nam_songam:   { x: 268, y: 218 },
+  nam_bongson1: { x: 336, y: 121 },
+  nam_bongson2: { x: 341, y: 152 },
+  nam_daechon:  { x: 169, y: 340 },
+};
+
+const DONG_NAMES = {
+  seo_hwajung: '화정동',
+  seo_sangmu:  '상무지구',
+  seo_geumho:  '금호동',
+  seo_pungam:  '풍암동',
+
+  nam_yangnim:  '양림동',
+  nam_bangnim1: '방림1동',
+  nam_bangnim2: '방림2동',
+  nam_sajik:    '사직동',
+  nam_wolsan_m: '월산동',
+  nam_wolsan4:  '월산4동',
+  nam_wolsan5:  '월산5동',
+  nam_baekun1:  '백운1동',
+  nam_baekun2:  '백운2동',
+  nam_juwol1:   '주월1동',
+  nam_juwol2:   '주월2동',
+  nam_hyodeok:  '효덕동',
+  nam_songam:   '송암동',
+  nam_bongson1: '봉선1동',
+  nam_bongson2: '봉선2동',
+  nam_daechon:  '대촌동',
+};
+
+const TYPE_COLORS = {
+  '교통·보행':   '#e8345a',
+  '주거·재개발': '#7c3aed',
+  '환경·생태':   '#16a34a',
+  '상권·경제':   '#f07818',
+  '안전':        '#0284c7',
+  '기타':        '#64748b',
 };
 
 let _curDongKey = null;
@@ -1662,23 +939,79 @@ function openDong(dongKey, dongName, districtLabel) {
   document.getElementById('dong-title').textContent = dongName;
   document.getElementById('form-dong-display').textContent = districtLabel + ' · ' + dongName;
 
-  // 연구 카드 링크
-  const cardKey = DONG_CARD_MAP[dongKey];
-  const linkEl  = document.getElementById('dong-research-link');
-  if (cardKey && CARDS[cardKey]) {
-    linkEl.innerHTML =
-      `<div class="dong-research-btn" onclick="closeDong();openCard('${cardKey}')">` +
-      `📖 이 지역 연구 카드 보기 →</div>`;
-  } else {
-    linkEl.innerHTML = '';
-  }
-
-  // 안내 문구
   document.getElementById('dong-legend-hint').textContent =
-    '아래 제보는 학생들이 직접 남긴 기록이에요';
+    '아래 제보는 학생들이 직접 남긴 기록이에요. 제보를 남기면 지도에 핀이 바로 표시돼요!';
 
   loadDongReports(dongKey);
   document.getElementById('overlay-dong').classList.add('open');
+}
+
+// ── 실시간 제보 핀 마커 ──
+let _markersListener = null;
+
+function startMarkersListener(district) {
+  stopMarkersListener();
+  const prefix = district + '_';
+
+  _markersListener = db.ref('reports').on('value', snap => {
+    const counts = {};
+    snap.forEach(dongSnap => {
+      const dongKey = dongSnap.key;
+      if (!dongKey.startsWith(prefix) || !DONG_CENTROIDS[dongKey]) return;
+      const typeTally = {};
+      let total = 0;
+      dongSnap.forEach(r => {
+        const t = r.val().type || '기타';
+        typeTally[t] = (typeTally[t] || 0) + 1;
+        total++;
+      });
+      if (!total) return;
+      let topType = '기타', topCount = 0;
+      Object.keys(typeTally).forEach(t => {
+        if (typeTally[t] > topCount) { topCount = typeTally[t]; topType = t; }
+      });
+      counts[dongKey] = { count: total, topType };
+    });
+    renderMarkers(district, counts);
+  });
+}
+
+function stopMarkersListener() {
+  if (_markersListener) {
+    db.ref('reports').off('value', _markersListener);
+    _markersListener = null;
+  }
+  ['rmarkers-seo', 'rmarkers-nam'].forEach(id => {
+    const g = document.getElementById(id);
+    if (g) g.innerHTML = '';
+  });
+}
+
+function renderMarkers(district, counts) {
+  const g = document.getElementById('rmarkers-' + district);
+  if (!g) return;
+  const districtLabel = district === 'seo' ? '서구' : '남구';
+  g.innerHTML = Object.keys(counts).map(dongKey => {
+    const { x, y } = DONG_CENTROIDS[dongKey];
+    const { count, topType } = counts[dongKey];
+    const color = TYPE_COLORS[topType] || 'var(--accent)';
+    const name  = DONG_NAMES[dongKey];
+    return `
+      <g class="marker" tabindex="0" role="button" aria-label="${name} 제보 ${count}건"
+         onclick="openDong('${dongKey}','${name}','${districtLabel}')"
+         onkeydown="handleRMarkerKey(event,'${dongKey}','${name}','${districtLabel}')">
+        <circle cx="${x}" cy="${y}" r="14" fill="none" stroke="${color}" stroke-width="2" opacity="0">
+          <animate attributeName="r" values="14;30" dur="1.8s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.7;0" dur="1.8s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="${x}" cy="${y}" r="13" fill="${color}" stroke="white" stroke-width="2"/>
+        <text x="${x}" y="${y + 4}" text-anchor="middle" fill="white" font-size="11" font-weight="800" pointer-events="none">${count}</text>
+      </g>`;
+  }).join('');
+}
+
+function handleRMarkerKey(event, dongKey, name, districtLabel) {
+  if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openDong(dongKey, name, districtLabel); }
 }
 
 function closeDong() {
